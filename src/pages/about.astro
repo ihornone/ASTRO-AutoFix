@@ -1,0 +1,226 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import Button from '../components/ui/Button.astro';
+import TeamCard from '../components/cards/TeamCard.astro';
+import {
+	ArrowRight,
+	CalendarDays,
+	Car,
+	Check,
+	Clock,
+	Cog,
+	Phone,
+	Play,
+	ShieldCheck,
+	Wrench,
+} from 'lucide-react';
+
+const metrics = [
+	{ icon: Car, title: '8 500+', text: 'обслугованих авто з 2018 р.' },
+	{ icon: Clock, title: '45 хв.', text: 'середній час планового ТО' },
+	{ icon: Wrench, title: '100%', text: 'узгодження робіт до старту' },
+	{ icon: ShieldCheck, title: '12 міс.', text: 'офіційна письмова гарантія' },
+];
+
+const values = [
+	{
+		title: '100% фіксований кошторис',
+		text: 'Сума в заказ-наряді узгоджується до початку робіт. Жодної зайвої копійки в фінальному чеку.',
+	},
+	{
+		title: 'Відеозвіт дефектів у месенджер',
+		text: 'Знімаємо на відео виявлені люфти й течі, надсилаємо у Viber/Telegram до того, як розпочати заміну.',
+	},
+	{
+		title: 'Офіційна гарантія 12 місяців',
+		text: 'Письмові гарантійні зобов’язання або 20 000 км пробігу на всі виконані роботи та придбані в нас деталі.',
+	},
+	{
+		title: 'Пунктуальність хвилина в хвилину',
+		text: 'Віддаємо справний автомобіль точно в узгоджений термін. Затримка з нашої вини — знижка 15% на послуги.',
+	},
+	{
+		title: 'Сертифіковані запчастини',
+		text: 'Власний склад оригінальних деталей і перевірених брендів (Bosch, Lemförder, Brembo, Motul) без націнок.',
+	},
+];
+
+const team = [
+	{
+		name: 'Олександр Мельник',
+		description:
+			'Керівник сервісу · 14 років досвіду в авторемонті, організація процесів і контроль якості',
+		image: 'team-manager',
+		icon: Phone,
+	},
+	{
+		name: 'Тарас Коваль',
+		description:
+			'Провідний моторист · спеціаліст з двигунів VAG, BMW, PSA та Ford. Досвід понад 11 років',
+		image: 'team-mechanic',
+		icon: Wrench,
+	},
+	{
+		name: 'Юрій Бойко',
+		description:
+			'Автоелектрик-діагност · дилерські сканери, ендоскопія двигунів, ремонт складних CAN-мереж',
+		image: 'team-diagnostic',
+		icon: Cog,
+	},
+	{
+		name: 'Михайло Гринів',
+		description: 'Майстер ходової та кермового керування · 3D-розвал сходження, реставрація гальм',
+		image: 'team-suspension',
+		icon: Car,
+	},
+];
+
+const guarantees = [
+	{ icon: Check, title: 'Офіційний акт', text: 'із фіксацією робіт і пробігу' },
+	{ icon: Wrench, title: 'Старі деталі в авто', text: 'демонструємо причину зносу' },
+	{ icon: ShieldCheck, title: '12 місяців гарантії', text: 'або 20 000 км на все' },
+];
+---
+
+<Layout title="Про нас">
+	<div class="services-page about-page text-[#f4f3ef] [&_h2_span]:[color:#f44336] [padding-bottom:28px]">
+		<PageHero
+			imagePosition="object-[65%_center] brightness-90"
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Про нас' }]}
+			intro="Чесний автосервіс у Львові, що поєднує сучасне дилерське обладнання, фіксований кошторис та офіційну гарантію 12 місяців."
+		>
+			<Fragment slot="title">
+				Про <span>AutoFix</span>
+			</Fragment>
+			<Button data-book>
+				<CalendarDays size={19} />
+				Записатись на сервіс <ArrowRight size={17} />
+			</Button>
+			<Button variant="outline" href="#our-story">
+				<Play size={17} />
+				Наша історія
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} aria-label="Наш підхід" />
+
+		<section
+			class="container about-story mx-auto grid w-full max-w-[1320px] grid-cols-1 items-center gap-7 px-4 py-12 sm:px-6 md:grid-cols-[0.9fr_1.1fr] md:gap-10 md:py-16 lg:gap-14 lg:px-8"
+			id="our-story"
+		>
+			<div class="about-story-copy max-w-xl">
+				<span class="mb-4 inline-flex items-center gap-2 font-bold uppercase tracking-[0.16em] text-[#f44336]">
+					<span class="h-px w-7 bg-[#f44336]"></span>НАША ІСТОРІЯ
+				</span>
+				<h2 class="mb-5 text-2xl font-semibold leading-[1.08] tracking-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Автосервіс, створений <span>для людей</span>
+				</h2>
+				<p class="mb-4 text-base leading-7 text-white/85 [color:#b3b8b2]">
+					AutoFix розпочав роботу у 2018 році з простої ідеї: створити автосервіс у Львові, де
+					автовласникам не доводиться хвилюватися через нав’язані послуги чи раптове подвоєння ціни
+					в чеку.
+				</p>
+				<p class="mb-7 text-sm leading-7 text-white/60 [color:#b3b8b2]">
+					Ми інвестували в німецькі діагностичні сканери, підйомники з регулюванням геометрії та
+					власний склад сертифікованих запчастин. Наші майстри мають від 8 років практичного
+					досвіду, а кожну виявлену проблему ми обов’язково показуємо власнику на відео перед тим,
+					як братися за ремонт.
+				</p>
+				<Button variant="soft" href="#our-values">
+					Принципи нашої роботи <ArrowRight size={17} class="text-[#f44336]" />
+				</Button>
+			</div>
+			<div class="about-story-visual relative h-64 overflow-hidden rounded-2xl border border-white/10 sm:h-80 md:h-[420px]">
+				<img
+					class="h-full w-full object-cover object-[65%_center] brightness-90 [display:block] [width:100%] [object-fit:cover]"
+					src="/images/hero.jpg"
+					alt="Автомобіль у робочій зоні майстерні"
+					loading="lazy"
+				/>
+				<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#080b0d]/45 via-transparent to-transparent"></div>
+				<span class="absolute bottom-4 left-4 rounded-lg border border-white/15 bg-[#080b0d]/65 px-3 py-2 text-sm font-medium text-white/85 backdrop-blur-sm">
+					Турбота про кожну деталь
+				</span>
+			</div>
+		</section>
+
+		<section
+			class="container about-values mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-16 lg:px-8"
+			id="our-values"
+		>
+			<h2 class="mb-7 text-2xl font-semibold tracking-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Чому <span>обирають</span> нас?
+			</h2>
+			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+				{values.map(({ title, text }) => (
+					<article class="about-value-item flex flex-col items-start rounded-xl border border-white/10 bg-white/[0.025] p-4 sm:p-5">
+						<h3 class="mb-3 text-base font-semibold leading-snug [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+							{title}
+						</h3>
+						<p class="mb-0 text-sm leading-5 text-white/60 [color:#b3b8b2]">{text}</p>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="container about-team mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-16 lg:px-8">
+			<div class="about-section-title mb-6 flex items-center justify-between gap-4">
+				<h2 class="mb-0 text-2xl font-semibold tracking-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Наша <span>команда</span>
+				</h2>
+				<Button variant="outline" href="/contacts/">
+					Зв’язатися <ArrowRight size={17} />
+				</Button>
+			</div>
+			<div class="about-team-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+				{team.map((member) => (
+					<TeamCard {...member} />
+				))}
+			</div>
+		</section>
+
+		<section class="container about-guarantees mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-8 px-4 py-10 sm:px-6 md:grid-cols-2 md:items-center md:py-16 lg:px-8">
+			<div>
+				<h2 class="mb-4 text-2xl font-semibold tracking-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Офіційні <span>гарантії</span> та стандарти
+				</h2>
+				<p class="mb-0 max-w-xl text-sm leading-7 text-white/65 [color:#b3b8b2]">
+					Кожен ремонт супроводжується офіційним заказ-нарядом, чеком та гарантійним талоном. Ми
+					відкриті до присутності в ремзоні та повної перевірки замінених деталей.
+				</p>
+			</div>
+			<div class="about-guarantee-items grid grid-cols-1 gap-3 sm:grid-cols-3">
+				{guarantees.map(({ icon: Icon, title, text }) => (
+					<article class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+						<Icon size={28} class="shrink-0 text-[#f44336]" />
+						<strong class="text-sm font-semibold">
+							{title}
+							<br />
+							{text}
+						</strong>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="container mx-auto my-10 w-full max-w-[1320px] px-4 sm:px-6 md:my-16 lg:px-8">
+			<div class="about-final grid w-full grid-cols-1 items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-6 sm:px-6 md:grid-cols-[1fr_1fr_auto] md:items-center md:gap-8">
+				<h2 class="mb-0 text-2xl font-semibold leading-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Потрібен чесний ремонт
+					<br />
+					<span>без зайвих витрат?</span>
+				</h2>
+				<p class="mb-0 text-sm leading-6 text-white/65 [color:#b3b8b2]">
+					Запишіться на діагностику чи ТО — підберемо зручний час, назвемо точну вартість і приймемо
+					без черги.
+				</p>
+				<Button data-book class="w-full md:w-auto">
+					<CalendarDays size={19} />
+					Записатись на сервіс <ArrowRight size={17} />
+				</Button>
+			</div>
+		</section>
+	</div>
+</Layout>

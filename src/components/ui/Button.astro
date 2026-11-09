@@ -1,0 +1,50 @@
+---
+/**
+ * Єдина кнопка сайту. Рендерить <a> при переданому href, інакше <button>.
+ * Класи .button / .button.outline збережені для світлої теми (селектори в Layout).
+ */
+interface Props {
+	variant?: 'primary' | 'outline' | 'soft';
+	size?: 'md' | 'sm';
+	href?: string;
+	type?: 'button' | 'submit';
+	class?: string;
+	[key: string]: unknown;
+}
+
+const {
+	variant = 'primary',
+	size = 'md',
+	href,
+	type = 'button',
+	class: className,
+	...rest
+} = Astro.props;
+
+const base =
+	'button inline-flex cursor-pointer items-center justify-center whitespace-normal rounded-lg border font-bold transition duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]';
+
+const variants = {
+	primary:
+		'gap-3 border-[#f44336] bg-[#f44336] px-5 py-3 text-sm leading-relaxed text-[#170f0f] hover:border-[#ff5252] hover:bg-[#ff5252]',
+	outline:
+		'gap-3 border-[#505650] bg-transparent px-5 py-3 text-sm leading-relaxed text-[#f4f3ef] hover:border-[#f44336] hover:bg-white/5 hover:text-white',
+	soft: 'min-h-12 gap-3 rounded-lg border-white/40 bg-white/[0.03] px-5 py-3 text-sm font-semibold leading-none text-white hover:border-[#f44336] hover:bg-white/[0.07]',
+};
+
+const classes = [
+	base,
+	variants[variant],
+	variant !== 'soft' && size === 'sm' ? 'gap-2 px-4 py-2.5' : '',
+	className,
+]
+	.filter(Boolean)
+	.join(' ');
+
+const Tag = href ? 'a' : 'button';
+const tagProps = href ? { href } : { type };
+---
+
+<Tag class={classes} {...tagProps} {...rest}>
+	<slot />
+</Tag>

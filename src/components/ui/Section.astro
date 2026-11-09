@@ -1,0 +1,40 @@
+---
+/**
+ * Контейнерна секція з опціональним заголовком і кнопкою-посиланням праворуч.
+ * Заголовок передається слотом "title" (щоб можна було вставити акцентний <span>).
+ */
+import Button from './Button.astro';
+import { ArrowRight } from 'lucide-react';
+
+interface Props {
+	class?: string;
+	id?: string;
+	'aria-label'?: string;
+	link?: { href: string; label: string };
+}
+
+const { class: className, id, link } = Astro.props;
+const hasTitle = Astro.slots.has('title');
+---
+
+<section
+	class:list={[
+		'container mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8',
+		className,
+	]}
+	id={id}
+>
+	{hasTitle && (
+		<div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+			<h2 class="mb-0 text-2xl font-bold tracking-tight text-white">
+				<slot name="title" />
+			</h2>
+			{link && (
+				<Button variant="outline" href={link.href}>
+					{link.label} <ArrowRight size={17} />
+				</Button>
+			)}
+		</div>
+	)}
+	<slot />
+</section>

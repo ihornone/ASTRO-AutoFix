@@ -1,0 +1,241 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import Button from '../components/ui/Button.astro';
+import WorkCard from '../components/cards/WorkCard.astro';
+import { ArrowRight, CalendarDays, Car, Check, Cog, Menu, ShieldCheck, Wrench } from 'lucide-react';
+
+const icons = { tool: Wrench, car: Car, shield: ShieldCheck, gear: Cog, menu: Menu, check: Check };
+
+const works = [
+	{
+		title: 'Заміна комплекту ГРМ та помпи',
+		category: 'Двигун',
+		description:
+			'Планова заміна ременя ГРМ, роликів INA та водяного насоса за заводським регламентом.',
+		image: 'engine',
+		car: 'Volkswagen Passat 2.0 TDI',
+		time: '5 годин',
+	},
+	{
+		title: 'Встановлення перфорованих гальм Brembo',
+		category: 'Гальма',
+		description:
+			'Усунення биття керма при гальмуванні: заміна дисків, колодок і повна ревізія супортів.',
+		image: 'brakes',
+		car: 'BMW 5 Series (G30)',
+		time: '3 години',
+	},
+	{
+		title: 'Капітальне відновлення підвіски',
+		category: 'Ходова',
+		description:
+			'Усунення стуків: заміна амортизаторів Sachs, сайлентблоків Lemförder та 3D-розвал.',
+		image: 'brakes',
+		car: 'Audi A6 Allroad',
+		time: '1 робочий день',
+	},
+	{
+		title: 'Комплексне планове ТО-60',
+		category: 'ТО',
+		description:
+			'Заміна масла Motul 5W-30, 4 фільтрів, гальмівної рідини та діагностика 24 вузлів.',
+		image: 'oil',
+		car: 'Skoda Octavia A7',
+		time: '45 хвилин',
+	},
+	{
+		title: 'Пошук витоку струму та ремонт проводки',
+		category: 'Електрика',
+		description:
+			'Усунення розряджання АКБ за ніч: знайдено коротке замикання в модулі дверей водія.',
+		image: 'diagnostics',
+		car: 'Ford Kuga EcoBoost',
+		time: '4 години',
+	},
+	{
+		title: 'Чистка та заправка клімат-контролю',
+		category: 'Інше',
+		description:
+			'Опресування азотом 18 бар, усунення витоку на ущільнювачі, заправка 550 г фреону R134a.',
+		image: 'engine',
+		car: 'Hyundai Tucson',
+		time: '2 години',
+	},
+	{
+		title: 'Комплексна перевірка перед купівлею',
+		category: 'Діагностика',
+		description: 'Ендоскопія циліндрів, перевірка пробігу по блоках DSG, тест ЛФП товщиноміром.',
+		image: 'diagnostics',
+		car: 'Volkswagen Golf 7',
+		time: '1.5 години',
+	},
+	{
+		title: 'Сезонний шиномонтаж R18 та балансування',
+		category: 'Інше',
+		description:
+			'Акуратне перевзування без подряпин дисків, чищення маточин і балансування до 1 г.',
+		image: 'tires',
+		car: 'Toyota Corolla',
+		time: '40 хвилин',
+	},
+	{
+		title: 'Регулювання розвалу-сходження коліс',
+		category: 'Ходова',
+		description:
+			'Вирівнювання геометрії на 3D-стенді Hunter після заміни кермових тяг і наконечників.',
+		image: 'workshop',
+		car: 'Renault Megane 4',
+		time: '1 година',
+	},
+];
+
+const categories = [
+	'Усі роботи',
+	'Діагностика',
+	'Двигун',
+	'Гальма',
+	'Ходова',
+	'Електрика',
+	'ТО',
+	'Інше',
+];
+
+const metrics = [
+	{ icon: Wrench, title: 'Повний цикл', text: 'від діагностики до видачі авто' },
+	{ icon: Car, title: 'Більшість марок', text: 'європейські, азійські, США' },
+	{
+		icon: ShieldCheck,
+		title: 'Гарантія 12 міс.',
+		text: 'на виконані роботи та деталі',
+	},
+	{ icon: Cog, title: 'Фотозвіт у месенджер', text: 'прозорий процес для водія' },
+];
+---
+
+<Layout title="Наші роботи">
+	<div class="services-page works-page text-[#f4f3ef] [padding-bottom:28px]">
+		<PageHero
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Наші роботи' }]}
+			intro="Реальні приклади виконаних робіт у AutoFix Львів. Від швидкого ТО за 45 хв до складного ремонту двигунів."
+		>
+			<Fragment slot="title">
+				Наші <span>роботи</span> та кейси
+			</Fragment>
+			<Button data-book>
+				<CalendarDays size={19} />
+				Записатись на сервіс <ArrowRight size={17} />
+			</Button>
+			<Button variant="outline" href="/services/">
+				<Wrench size={19} />
+				Наші послуги
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} />
+
+		<section class="container works-content mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8 [padding-block:30px]">
+			<h2 class="mb-4 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Роботи за напрямами
+			</h2>
+			<div
+				class="works-filters mb-4 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+				role="group"
+				aria-label="Категорії робіт"
+			>
+				{categories.map((category, i) => {
+					const I = i === 0 ? Menu : i === 1 ? Cog : i === 5 ? Check : Wrench;
+					return (
+						<button
+							class:list={[
+								'flex shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-[#111618] px-3 py-2 text-sm text-white/70 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336] hover:border-[#f44336] [&.selected]:border-[#f44336] [&.selected]:bg-[#f44336] [&.selected]:font-bold [&.selected]:text-[#170f0f]',
+								{ selected: i === 0 },
+							]}
+							data-work-filter={category}
+							aria-pressed={i === 0}
+						>
+							<I size={20} />
+							{category}
+						</button>
+					);
+				})}
+			</div>
+			<p class="works-demo mb-5 text-sm leading-5 text-white/50 [color:#b3b8b2]">
+				Демонстраційні приклади робіт. Фото, моделі авто та строки наведені для ілюстрації.
+			</p>
+			<div class="works-grid grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				{works.map(({ title, category, description, image, car, time }, i) => (
+					<WorkCard
+						variant="work"
+						title={title}
+						description={description}
+						image={image}
+						car={car}
+						time={time}
+						data-work-category={category}
+						hidden={i >= 6}
+					/>
+				))}
+			</div>
+			<p id="works-empty" hidden role="status">
+				У цій категорії поки немає прикладів робіт.
+			</p>
+			<Button variant="outline" id="works-more" class="works-more mt-7">
+				Завантажити більше робіт <ArrowRight size={18} />
+			</Button>
+		</section>
+
+		<section class="container works-final-wrap mx-auto my-8 w-full max-w-[1320px] px-4 sm:my-12 sm:px-6 lg:px-8">
+			<div class="works-final flex w-full flex-col items-start gap-5 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-6 sm:px-7 md:flex-row md:items-center md:justify-between">
+				<div class="max-w-xl">
+					<h2 class="mb-2 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+						Потрібен якісний ремонт авто?
+					</h2>
+					<p class="mb-0 text-sm leading-6 text-white/60 [color:#b3b8b2]">
+						Запишіться на діагностику або ТО вже сьогодні —
+						<br />
+						визначимо точний кошторис і повернемо авто в ідеальному стані.
+					</p>
+				</div>
+				<Button data-book class="w-full shrink-0 md:w-auto">
+					<CalendarDays size={20} />
+					Записатись на сервіс <ArrowRight size={18} />
+				</Button>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<script>
+	const cards = [...document.querySelectorAll<HTMLElement>('[data-work-category]')];
+	const more = document.querySelector<HTMLButtonElement>('#works-more')!;
+	const filters = document.querySelectorAll<HTMLButtonElement>('[data-work-filter]');
+	let category = 'Усі роботи';
+	let limit = 6;
+	function renderWorks() {
+		const matching = cards.filter(
+			(card) => category === 'Усі роботи' || card.dataset.workCategory === category,
+		);
+		cards.forEach((card) => (card.hidden = true));
+		matching.slice(0, limit).forEach((card) => (card.hidden = false));
+		more.hidden = matching.length <= limit;
+		document.querySelector<HTMLElement>('#works-empty')!.hidden = matching.length > 0;
+	}
+	filters.forEach((button) =>
+		button.addEventListener('click', () => {
+			category = button.dataset.workFilter!;
+			limit = 6;
+			filters.forEach((item) => {
+				item.classList.toggle('selected', item === button);
+				item.setAttribute('aria-pressed', String(item === button));
+			});
+			renderWorks();
+		}),
+	);
+	more.addEventListener('click', () => {
+		limit += 6;
+		renderWorks();
+	});
+	renderWorks();
+</script>

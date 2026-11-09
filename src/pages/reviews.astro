@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/ui/Button.astro';
+import ReviewCard from '../components/cards/ReviewCard.astro';
+import { ArrowRight, CalendarDays, Car, Mail, ShieldCheck, Star, Wrench } from 'lucide-react';
+
+const metrics = [
+	{ icon: Star, title: '4.9 / 5.0', text: 'Середній рейтинг у Google' },
+	{ icon: Car, title: '8 500+', text: 'Обслугованих авто у Львові' },
+	{ icon: ShieldCheck, title: '12 місяців', text: 'Офіційна письмова гарантія' },
+	{ icon: Wrench, title: '100%', text: 'Кошторис без прихованих платежів' },
+];
+
+const reviews = [
+	[
+		'Андрій Коваленко · Volkswagen Passat B8 (2.0 TDI)',
+		'З’явився глухий металевий стукіт спереду на нерівностях. На іншому сервісі нарахували заміну стійок і важелів у зборі на 18 000 грн. Звернувся в AutoFix: за 25 хвилин на підйомнику виявили зношені втулки стабілізатора та розбиту праву тягу. Надіслали відео у Viber, погодили бюджет 1 650 грн із роботою. Стукіт зник повністю. Рідкісна для автосервісів порядність!',
+	],
+	[
+		'Олена Марченко · Skoda Octavia A7',
+		'Робила комплексне планове ТО: заміна масла Motul, трьох фільтрів та заправка кондиціонера перед літом. Приємно вразило, що в цеху ідеальна чистота, майстри у фірмовому спецодязі, каністри з маслом відкривали при мені. За 50 хвилин усе було готово, виписали акт із гарантією та поклали старі деталі в багажник. Дуже комфортний сервіс!',
+	],
+	[
+		'Ігор Данилюк · BMW 520d (G30)',
+		'Замовляв послугу повної перевірки автомобіля перед купівлею. Хлопці перевірили комп’ютером усі блоки, виявили скручений пробіг на 85 000 км, підтікання заднього сальника колінвала та зношені гальмівні диски. Завдяки детальному акту огляду збив ціну у продавця на $1 400. Однозначно рекомендую перед будь-якою покупкою!',
+	],
+	[
+		'Максим Руденко · Audi A6 Allroad (3.0 TDI)',
+		'Міняв комплект ременя ГРМ із помпою охолодження та ременями навісного обладнання. Робота складна, вимагає розбирання всієї передньої частини. Зробили за 1 робочий день, моменти затяжки болтів перевіряли динамометричним ключем. Машина працює як годинник, ціна залишилася копійка в копійку, як домовилися спочатку.',
+	],
+	[
+		'Сергій Волинець · Renault Megane 4',
+		'Кондиціонер перестав дути холодним, а на швидкісній трасі з’явився сильний свист. На іншому СТО просто двічі доливали фреон, який виходив за тиждень. В AutoFix перевірили систему азотом під тиском 18 бар, знайшли мікротріщину в радіаторі, замінили його й заправили за точною вагою. Тепер у салоні льодовиковий період навіть у +35°C.',
+	],
+	[
+		'Ірина Савчук · Toyota RAV4 Hybrid',
+		'Боялася їздити на звичайні СТО з гібридом. В AutoFix майстер Юрій підключив дилерський сканер, провів тест високовольтної батареї, інвертора та перевірив гальмівну систему з рекуперацією. Пояснив усе доступно без жодної зверхності. Ціна дуже адекватна, сервіс преміального рівня.',
+	],
+	[
+		'Віктор Лисенко · Ford Kuga (2.0 EcoBoost)',
+		'Раптово загорівся Check Engine, машина смикалася під час розгону. Діагност за 20 хвилин знайшов пробій котушки 3-го циліндра та нагар на свічках. Запчастини були на їхньому складі, замінили на місці за пів години. Жодних зайвих послуг не нав’язували.',
+	],
+	[
+		'Наталія Поліщук · Hyundai Tucson',
+		'Звернулася зі скаргою на вібрацію керма на швидкості понад 90 км/год. Зробили сезонний шиномонтаж і динамічне балансування. Виявилося, що на минулому шиномонтажі не очистили посадкову поверхню диска від іржі. Після правильного чищення та балансування кермо стоїть як вкопане. Дякую!',
+	],
+	[
+		'Дмитро Мельник · Kia Sportage',
+		'Регулярно обслуговую два службових авто нашої компанії. Дуже зручно: запис за графіком, чіткі акти виконаних робіт із безготівкою, фіксований прайс і швидка видача авто. За 2 роки співпраці — жодної затримки чи претензії.',
+	],
+] as const;
+
+const platforms = [
+	['Google', 'G'],
+	['Google Maps', '⌖'],
+	['Facebook', 'f'],
+] as const;
+---
+
+<Layout title="Відгуки">
+	<div class="services-page feedback-page text-[#f4f3ef] [padding-bottom:28px]">
+		<PageHero
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Відгуки' }]}
+			intro="Чесні враження реальних автовласників Львова. Відкритість до діалогу, прозорий кошторис та якість робіт."
+		>
+			<Fragment slot="title">
+				Відгуки <span>водіїв</span>
+			</Fragment>
+			<Button data-book>
+				<CalendarDays size={19} />
+				Записатись на сервіс <ArrowRight size={17} />
+			</Button>
+			<Button variant="outline" data-write-review>
+				<Mail size={18} />
+				Залишити відгук
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} />
+
+		<section class="container feedback-content mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8 [padding-block:35px_28px]">
+			<h2 class="mb-5 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Історії обслуговування від наших <span class="text-[#f44336]">клієнтів</span>
+			</h2>
+			<p class="feedback-demo mb-5 text-sm text-white/70 [color:#b3b8b2]">
+				Реальний досвід автовласників, які довірили нам свої автомобілі.
+			</p>
+			<div
+				class="feedback-grid grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 [grid-auto-rows:1fr]"
+				id="feedback-grid"
+			>
+				{reviews.map(([name, text], i) => (
+					<ReviewCard variant="quote" name={name} text={text} hidden={i >= 6} />
+				))}
+			</div>
+			<Button variant="outline" id="more-reviews" class="feedback-more mt-7">
+				Завантажити більше відгуків <ArrowRight size={17} />
+			</Button>
+		</section>
+
+		<CtaBand
+			buttonLabel="Написати відгук"
+			dataBook={false}
+			buttonData={{ 'data-write-review': '' }}
+		>
+			<Fragment slot="title">Залиште свій відгук</Fragment>
+			<Fragment slot="text">
+				Поділіться враженнями про нашу роботу — ваша думка допомагає нам ставати кращими!
+			</Fragment>
+		</CtaBand>
+
+		{/* Платформи */}
+		<section class="container feedback-platforms mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-3 px-4 py-10 sm:px-6 md:grid-cols-3 md:py-14 lg:px-8 [align-items:center] [gap:20px] [padding-block:38px_10px] [&_article]:[border:1px_solid_#ffffff30] [&_article]:[border-radius:var(--r-xl)] [&_article]:[background:#151a1b] [&_article]:[min-height:154px] [&_article]:[padding:20px_24px] [&_article_h3]:[margin-bottom:9px] [&_article_p]:[color:#9ca9a0] [&_article_p]:[line-height:1.4] [&_article_p]:[margin:7px_0_0] [@media(min-width:561px)_and_(max-width:900px)]:[grid-template-columns:repeat(3,_1fr)] [@media(min-width:561px)_and_(max-width:900px)]:[&_article]:[padding:16px] [@media(max-width:560px)]:[grid-template-columns:1fr] [@media(max-width:560px)]:[&_article]:[min-height:0]">
+			<div>
+				<h2 class="text-2xl font-semibold leading-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+					Наш рейтинг
+					<br />
+					на <span>платформах</span>
+				</h2>
+				<p class="mt-4 text-sm leading-relaxed text-[#c3cdc6]">
+					Ми цінуємо кожен відгук та дякуємо за вашу довіру!
+				</p>
+			</div>
+			{platforms.map(([name, mark]) => (
+				<article>
+					<span class="platform-mark mb-2 block text-2xl font-bold leading-none text-[#f44336]">
+						{mark}
+					</span>
+					<h3 class="mb-1 text-sm font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+						{name}
+					</h3>
+					<strong class="text-sm text-[#cbd2cd]">Ще не підключено</strong>
+					<p class="text-sm">Посилання на профіль з’явиться після запуску.</p>
+				</article>
+			))}
+		</section>
+
+		{/* Діалог залишення відгуку */}
+		<dialog
+			id="review-dialog"
+			class="relative max-h-[calc(100dvh-40px)] w-[min(560px,calc(100%-32px))] overflow-auto rounded-xl border border-[#414647] bg-[#111618] p-8 text-[#f4f3ef] shadow-2xl shadow-black/50 backdrop:bg-black/80 backdrop:backdrop-blur-md"
+		>
+			<button
+				type="button"
+				class="dialog-close text-[#c3c7c1] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+				id="close-review"
+				aria-label="Закрити"
+			>
+				×
+			</button>
+			<h2 class="text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+				Залиште <span class="text-[#f44336]">відгук</span>
+			</h2>
+			<form id="review-form" class="mt-4 flex flex-col gap-4">
+				<label class="block text-sm font-semibold text-[#b3b8b2]">
+					Ваше ім’я
+					<input
+						name="author"
+						required
+						minlength="2"
+						maxlength="60"
+						autocomplete="given-name"
+						class="mt-1 block w-full rounded-lg border border-[#464b45] bg-[#111416] px-3 py-2 text-sm text-[#f4f3ef] placeholder:text-white/40 focus:border-[#f44336] focus:outline-1 focus:outline-[#f44336]"
+					/>
+				</label>
+				<label class="block text-sm font-semibold text-[#b3b8b2]">
+					Оцінка
+					<select
+						name="rating"
+						class="mt-1 block w-full rounded-lg border border-[#464b45] bg-[#111416] px-3 py-2 text-sm text-[#f4f3ef] focus:border-[#f44336] focus:outline-1 focus:outline-[#f44336]"
+					>
+						{[5, 4, 3, 2, 1].map((rating) => (
+							<option value={rating}>{rating} із 5</option>
+						))}
+					</select>
+				</label>
+				<label class="block text-sm font-semibold text-[#b3b8b2]">
+					Ваш відгук
+					<textarea
+						name="message"
+						required
+						minlength="10"
+						maxlength="2000"
+						rows="4"
+						class="mt-1 block w-full rounded-lg border border-[#464b45] bg-[#111416] px-3 py-2 text-sm text-[#f4f3ef] placeholder:text-white/40 focus:border-[#f44336] focus:outline-1 focus:outline-[#f44336]"
+					></textarea>
+				</label>
+				<p class="mb-0 text-sm text-white/50 [color:#b3b8b2]">
+					Відгук збережеться лише у вашому браузері. Публічне надсилання ще не підключене.
+				</p>
+				<Button type="submit">
+					Зберегти відгук <ArrowRight size={17} />
+				</Button>
+				<p id="review-save-status" role="status"></p>
+			</form>
+		</dialog>
+	</div>
+</Layout>
+
+<script>
+	const cards = [...document.querySelectorAll<HTMLElement>('.feedback-card')];
+	const more = document.querySelector<HTMLButtonElement>('#more-reviews')!;
+	let limit = 6;
+	function renderReviews() {
+		cards.forEach((card, index) => (card.hidden = index >= limit));
+		more.hidden = cards.length <= limit;
+	}
+	more.addEventListener('click', () => {
+		limit += 6;
+		renderReviews();
+	});
+	const dialog = document.querySelector<HTMLDialogElement>('#review-dialog')!;
+	document
+		.querySelectorAll('[data-write-review]')
+		.forEach((button) => button.addEventListener('click', () => dialog.showModal()));
+	document.querySelector('#close-review')!.addEventListener('click', () => dialog.close());
+	const form = document.querySelector<HTMLFormElement>('#review-form')!;
+	form.addEventListener('submit', (event) => {
+		event.preventDefault();
+		const status = document.querySelector('#review-save-status')!;
+		try {
+			const data = Object.fromEntries(new FormData(form));
+			localStorage.setItem('autofix-review', JSON.stringify(data));
+			status.textContent = 'Відгук збережено у цьому браузері. Дякуємо!';
+			form.reset();
+		} catch {
+			status.textContent =
+				'Не вдалося зберегти відгук. Дозвольте браузеру локальне збереження та спробуйте ще раз.';
+		}
+	});
+	renderReviews();
+</script>

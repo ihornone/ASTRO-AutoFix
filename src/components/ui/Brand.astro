@@ -1,0 +1,29 @@
+---
+/** Логотип AutoFix: SVG-знак + назва. tagline — підпис у футері. */
+interface Props {
+	tagline?: boolean;
+}
+const { tagline = false } = Astro.props;
+---
+
+<a
+	class="brand flex shrink-0 items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+	href="/"
+	aria-label="AutoFix — головна"
+>
+	<svg
+		viewBox="0 0 48 48"
+		class="brand-mark h-8 w-8 text-[#f44336] [flex-shrink:0] md:h-9 md:w-9 [&_.lucide]:[stroke-width:1.6]"
+		fill="none"
+	>
+		<path
+			d="M42 6C23 3 5 19 7 35L36 17 20 38 7 35m13 3 16-5 6-17-19 9"
+			stroke="currentColor"
+			stroke-width="2.2"
+		></path>
+	</svg>
+	<span class="text-base font-bold tracking-[-0.06em]">
+		Auto<span class="autofix-accent [color:#f44336]">Fix</span>
+		{tagline && <small class="ml-2">СТО · ДІАГНОСТИКА · РЕМОНТ</small>}
+	</span>
+</a>

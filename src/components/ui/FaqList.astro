@@ -1,0 +1,19 @@
+---
+/** Список FAQ на нативних <details>. items: [питання, відповідь][]. */
+interface Props {
+	items: [string, string][];
+	class?: string;
+}
+const { items, class: className } = Astro.props;
+---
+
+<div class:list={['space-y-2', className]}>
+	{items.map(([question, answer]) => (
+		<details class="rounded-xl border border-white/10 bg-white/[0.03] px-4 transition-colors open:border-[#f44336]/40">
+			<summary class="cursor-pointer py-4 text-sm font-semibold text-white marker:text-[#f44336] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]">
+				{question}
+			</summary>
+			<p class="pb-4 text-sm leading-6 text-white/60 [color:#b3b8b2]">{answer}</p>
+		</details>
+	))}
+</div>

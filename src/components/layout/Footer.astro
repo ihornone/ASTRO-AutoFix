@@ -1,0 +1,33 @@
+---
+/** Футер: бренд із підписом, слоган, навігація, кнопка запису та нижній рядок. */
+import { ArrowRight } from 'lucide-react';
+import Brand from '../ui/Brand.astro';
+import Button from '../ui/Button.astro';
+import { nav, site } from '../../data';
+---
+
+<footer class="mt-16 border-t border-[#272b2d] bg-[#080b0d]">
+	<div class="container footer-top mx-auto flex w-full max-w-[1320px] flex-wrap items-center justify-between gap-6 px-4 py-8 sm:px-6 lg:flex-nowrap lg:px-8">
+		<Brand />
+		<div class="footer-links grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-[#c3c7c1] sm:grid-cols-4 sm:gap-x-6 [&_a]:[color:#c3c7c1]">
+			{nav.slice(1).map(([href, label]) => (
+				<a
+					class="transition hover:text-[#f44336] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+					href={href}
+				>
+					{label}
+				</a>
+			))}
+		</div>
+		<Button variant="outline" data-book>
+			Записатися на діагностику <ArrowRight />
+		</Button>
+	</div>
+	<div class="container footer-bottom mx-auto flex w-full max-w-[1320px] flex-col gap-2 border-t border-[#272b2d] px-4 py-4 text-sm text-[#929891] sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+		<span>© {new Date().getFullYear()} AutoFix — СТО Львів. Всі права захищено.</span>
+		<span>
+			{site.address} · {site.hoursWeekdays}
+		</span>
+		<a href="/privacy/">Конфіденційність</a>
+	</div>
+</footer>

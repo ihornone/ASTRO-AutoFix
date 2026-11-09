@@ -1,0 +1,505 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import Button from '../components/ui/Button.astro';
+import FeatureCard from '../components/ui/FeatureCard.astro';
+import {
+	ArrowRight,
+	CalendarDays,
+	Car,
+	Check,
+	Clock,
+	Cog,
+	Phone,
+	ShieldCheck,
+	Wrench,
+} from 'lucide-react';
+import { services } from '../data';
+
+const metrics = [
+	{
+		icon: CalendarDays,
+		title: 'Прийом без черги',
+		text: 'Запис на точний час у зручний день',
+	},
+	{
+		icon: Clock,
+		title: 'Швидке підтвердження',
+		text: 'Майстер зв’яжеться за 10 хвилин',
+	},
+	{
+		icon: ShieldCheck,
+		title: 'Офіційна гарантія',
+		text: '12 місяців або 20 000 км на все',
+	},
+	{
+		icon: Car,
+		title: 'Більшість марок',
+		text: 'Дилерські сканери та спецінструмент',
+	},
+];
+
+const howSteps = [
+	{
+		icon: CalendarDays,
+		title: '1. Заповніть форму',
+		text: 'Оберіть послугу, авто та бажаний час візиту',
+	},
+	{
+		icon: Check,
+		title: '2. Дзвінок за 10 хв',
+		text: 'Майстер підтверджує бронь підйомника та деталі',
+	},
+	{
+		icon: Wrench,
+		title: '3. Огляд і погодження',
+		text: 'Відеофіксація дефектів, фіксація кошторису',
+	},
+	{
+		icon: Car,
+		title: '4. Готове авто з гарантією',
+		text: 'Забираєте справне авто з гарантійним талоном на 12 міс.',
+	},
+];
+
+const wizardSteps = [
+	{ label: 'Послуга', short: 'Послуга' },
+	{ label: 'Автомобіль', short: 'Авто' },
+	{ label: 'Дата і час', short: 'Час' },
+	{ label: 'Контакти', short: 'Контакти' },
+];
+const times = [
+	'08:30',
+	'09:00',
+	'10:00',
+	'11:00',
+	'12:00',
+	'13:00',
+	'14:00',
+	'15:00',
+	'16:00',
+	'17:00',
+	'18:00',
+	'19:00',
+];
+
+const inputClass =
+	'mt-1 block w-full rounded-lg border border-[#464b45] bg-[#111416] px-3 py-2 text-sm text-[#f4f3ef] placeholder:text-white/40 focus:border-[#f44336] focus:outline-1 focus:outline-[#f44336]';
+
+/** Спільні стилі сітки полів кроків майстра запису */
+const fieldsClass =
+	'booking-fields grid grid-cols-1 gap-4 [gap:17px] [min-height:190px] [align-content:start] sm:grid-cols-2 [&_label]:flex [&_label]:flex-col [&_label]:gap-2 [&_label]:text-sm [&_label]:font-medium [&_label]:[color:#dce1dd] [&_input]:w-full [&_input]:min-w-0 [&_input]:rounded-lg [&_input]:border [&_input]:[border:1px_solid_#5a635c] [&_input]:[background:#0d1112] [&_input]:[padding:11px] [&_input]:[color:#fff] [&_select]:w-full [&_select]:rounded-lg [&_select]:border [&_select]:[border:1px_solid_#5a635c] [&_select]:[background:#0d1112] [&_select]:[padding:11px] [&_select]:[color:#fff] [&_textarea]:w-full [&_textarea]:rounded-lg [&_textarea]:border [&_textarea]:[border:1px_solid_#5a635c] [&_textarea]:[background:#0d1112] [&_textarea]:[padding:11px] [&_textarea]:[color:#fff] [&_textarea]:[resize:vertical] [@media(max-width:540px)]:[grid-template-columns:1fr]';
+---
+
+<Layout title="Онлайн-запис">
+	<div class="services-page booking-page text-[#f4f3ef] [padding-bottom:28px]">
+		<PageHero
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Онлайн-запис' }]}
+			intro="Запишіться на діагностику чи ТО за 1 хвилину. Прийом без черг, фіксований кошторис та офіційна гарантія 12 місяців."
+		>
+			<Fragment slot="title">
+				Онлайн-<span>запис</span> на автосервіс
+			</Fragment>
+			<Button href="#booking-wizard">
+				<CalendarDays size={19} />
+				Обрати дату й час <ArrowRight size={17} />
+			</Button>
+			<Button variant="outline" href="#booking-how">
+				Як відбувається візит?
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} />
+
+		<section
+			class="container booking-section mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8 [padding-block:28px] [scroll-margin-top:20px]"
+			id="booking-wizard"
+		>
+			<h2 class="mb-2 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Запис <span class="text-[#f44336]">на сервіс</span>
+			</h2>
+			<p class="mb-6 text-sm text-white/60 [color:#b3b8b2]">
+				Заповніть коротку форму за кілька кроків.
+			</p>
+			<div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+				<form
+					id="online-booking"
+					class="rounded-2xl border border-white/10 bg-[#111618] p-5 sm:p-7"
+				>
+					<ol
+						class="booking-progress mb-6 grid grid-cols-4 gap-2 border-b border-white/10 pb-5"
+						aria-label="Кроки запису"
+					>
+						{wizardSteps.map((step, i) => (
+							<li
+								class:list={[
+									'flex flex-col items-center gap-1.5 text-center text-xs font-semibold text-white/50 sm:text-sm',
+									{ 'text-[#f44336] active': i === 0 },
+								]}
+								data-progress={i}
+							>
+								<span class="flex size-8 items-center justify-center rounded-full border border-white/20 text-xs font-bold transition-colors sm:text-sm">
+									{i + 1}
+								</span>
+								<span class="max-w-full">
+									<span class="sm:hidden">{step.short}</span>
+									<span class="hidden sm:inline">{step.label}</span>
+								</span>
+							</li>
+						))}
+					</ol>
+
+					{/* Крок 1 */}
+					<fieldset class="border-0 p-0" data-step="0">
+						<legend class="mb-1 text-base font-bold text-white">Крок 1: Оберіть послугу</legend>
+						<p class="mb-4 text-sm text-[#b3b8b2]">Оберіть одну або декілька послуг зі списку.</p>
+						<div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+							{services.map((service, i) => {
+								const I = i % 2 ? Wrench : Cog;
+								return (
+									<label class="group relative flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-[#111618] p-3.5 transition hover:border-[#f44336]/60 [&:has(input:checked)]:border-[#f44336] [&:has(input:checked)]:bg-[#f44336]/5">
+										<input
+											type="checkbox"
+											name="services"
+											value={service.title}
+											data-cost={service.price}
+											class="sr-only"
+										/>
+										<span class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg border border-[#f44336]/30 bg-[#f44336]/10 text-[#f44336] transition-colors group-hover:bg-[#f44336] group-hover:text-black">
+											<I size={18} />
+										</span>
+										<span class="min-w-0 flex-1 pr-6">
+											<strong class="block text-sm font-bold text-white transition-colors">
+												{service.title}
+											</strong>
+											<small class="mt-0.5 block text-[#b3b8b2]">{service.items[0]}</small>
+											<b class="mt-1 block text-sm font-bold text-[#f44336]">
+												від {service.price} ₴
+											</b>
+										</span>
+										<span class="absolute right-3 top-3.5 flex size-5 items-center justify-center rounded-full border border-white/20 transition-all [&_svg]:opacity-0 group-has-checked:border-[#f44336] group-has-checked:bg-[#f44336] group-has-checked:[&_svg]:opacity-100">
+											<Check size={12} class="text-black" />
+										</span>
+									</label>
+								);
+							})}
+						</div>
+						<p class="booking-error text-[#ff5252]" id="service-error" hidden>
+							Оберіть щонайменше одну послугу.
+						</p>
+					</fieldset>
+
+					{/* Крок 2 */}
+					<fieldset class="border-0 p-0" data-step="1" hidden>
+						<legend class="mb-2 text-base font-semibold">Крок 2: Ваш автомобіль</legend>
+						<p>
+							Ці дані допоможуть майстру підібрати деталі за каталогом та підготувати підйомник.
+						</p>
+						<div class={fieldsClass}>
+							<label>
+								Марка автомобіля
+								<input
+									name="make"
+									required
+									placeholder="Наприклад, Volkswagen чи Toyota"
+									autocomplete="off"
+									class={inputClass}
+								/>
+							</label>
+							<label>
+								Модель
+								<input
+									name="model"
+									required
+									placeholder="Наприклад, Passat B8 чи RAV4"
+									class={inputClass}
+								/>
+							</label>
+							<label>
+								Рік випуску
+								<input
+									name="year"
+									type="number"
+									min="1950"
+									max={new Date().getFullYear() + 1}
+									placeholder="2018"
+									class={inputClass}
+								/>
+							</label>
+							<label>
+								Що вас турбує?
+								<textarea
+									name="notes"
+									rows="3"
+									placeholder="Опишіть симптоми (стукіт, вібрація, заміна масла тощо)"
+									class={inputClass}
+								></textarea>
+							</label>
+						</div>
+					</fieldset>
+
+					{/* Крок 3 */}
+					<fieldset class="border-0 p-0" data-step="2" hidden>
+						<legend class="mb-2 text-base font-semibold">Крок 3: Дата і час</legend>
+						<p>
+							Оберіть зручний для вас день і час. Майстер зв’яжеться для фінального підтвердження за
+							10 хв.
+						</p>
+						<div class={fieldsClass}>
+							<label>
+								Бажана дата
+								<input name="date" type="date" required class={inputClass} />
+							</label>
+							<label>
+								Бажаний час
+								<select name="time" required class={inputClass}>
+									<option value="">Оберіть час візиту</option>
+									{times.map((time) => (
+										<option>{time}</option>
+									))}
+								</select>
+							</label>
+						</div>
+					</fieldset>
+
+					{/* Крок 4 */}
+					<fieldset class="border-0 p-0" data-step="3" hidden>
+						<legend class="mb-2 text-base font-semibold">Крок 4: Контактні дані</legend>
+						<p>Вкажіть номер телефону для підтвердження броні підйомника та узгодження деталей.</p>
+						<div class={fieldsClass}>
+							<label>
+								Ваше ім’я
+								<input
+									name="name"
+									required
+									minlength="2"
+									autocomplete="given-name"
+									placeholder="Як до вас звертатися?"
+									class={inputClass}
+								/>
+							</label>
+							<label>
+								Телефон
+								<input
+									name="phone"
+									type="tel"
+									required
+									pattern="[+0-9 ()-]{10,20}"
+									autocomplete="tel"
+									placeholder="+380 __ ___ __ __"
+									class={inputClass}
+								/>
+							</label>
+						</div>
+						<p class="booking-demo mt-5 rounded-lg border border-[#454d46] p-3 text-sm text-[#b3b8b2]">
+							Гарантуємо конфіденційність: ми використовуємо контакти виключно для узгодження
+							візиту. Жодного спаму чи нав’язаних послуг.
+						</p>
+					</fieldset>
+
+					<div class="booking-navigation mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-4 [&_button:disabled]:[cursor:default] [&_button:disabled]:[opacity:0.35]">
+						<Button variant="outline" type="button" id="booking-back">
+							← Назад
+						</Button>
+						<Button type="button" id="booking-next">
+							Далі <ArrowRight size={18} />
+						</Button>
+					</div>
+					<p id="booking-storage-error" class="booking-error text-[#ff5252]" hidden>
+						Не вдалося зберегти запит. Дозвольте браузеру локальне збереження та спробуйте ще раз.
+					</p>
+					<div id="online-booking-success" hidden role="status">
+						<Check size={40} class="text-[#f44336]" />
+						<h3 class="mt-3 text-2xl font-bold text-white">Запит прийнято!</h3>
+						<p class="mt-2 text-sm text-[#b3b8b2]">
+							Дякуємо! Майстер-приймальник AutoFix зв’яжеться з вами протягом 10 хвилин для
+							підтвердження часу візиту.
+						</p>
+						<Button href="/" class="mt-4">
+							Повернутися на головну <ArrowRight size={17} />
+						</Button>
+					</div>
+				</form>
+
+				{/* Резюме запису */}
+				<aside class="rounded-2xl border border-white/10 bg-[#111618] p-5 sm:p-6 lg:sticky lg:top-24">
+					<h2 class="mb-4 border-b border-white/10 pb-3 text-base font-bold text-white">
+						Ваш запис
+					</h2>
+					<div class="space-y-4">
+						{[
+							{ icon: Wrench, label: 'Послуги', id: 'summary-services', fallback: 'Не обрано' },
+							{
+								icon: CalendarDays,
+								label: 'Дата і час',
+								id: 'summary-date',
+								fallback: 'Не обрано',
+							},
+							{ icon: Car, label: 'Автомобіль', id: 'summary-car', fallback: 'Не вказано' },
+							{ icon: Phone, label: 'Контакти', id: 'summary-contact', fallback: 'Не заповнено' },
+						].map(({ icon: Icon, label, id, fallback }) => (
+							<div class="flex items-start gap-3">
+								<Icon className="mt-0.5 shrink-0 text-[#f44336]" size={18} />
+								<div>
+									<strong class="block text-sm font-bold text-white">{label}</strong>
+									<span id={id} class="mt-0.5 block text-sm text-[#b3b8b2]">
+										{fallback}
+									</span>
+								</div>
+							</div>
+						))}
+					</div>
+					<div class="mt-5 border-t border-white/10 pt-4">
+						<span class="block text-sm text-[#b3b8b2]">Орієнтовна вартість:</span>
+						<strong id="summary-total" class="mt-0.5 block text-2xl font-bold text-[#f44336]">
+							Не розраховано
+						</strong>
+					</div>
+					<p class="mb-0 mt-4 rounded-xl border border-white/5 bg-white/[0.03] p-3 leading-relaxed text-[#b3b8b2]">
+						Точний кошторис фіксується в заказ-наряді перед початком робіт на основі діагностики.
+						Без прихованих доплат.
+					</p>
+				</aside>
+			</div>
+		</section>
+
+		<section
+			class="container mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8"
+			id="booking-how"
+		>
+			<h2 class="mb-6 text-2xl font-bold tracking-tight text-white">
+				Як відбувається <span class="text-[#f44336]">запис?</span>
+			</h2>
+			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+				{howSteps.map(({ icon, title, text }) => (
+					<FeatureCard icon={icon} title={title} text={text} iconSize={20} />
+				))}
+			</div>
+		</section>
+
+		<section class="container catalog-consultation booking-help mx-auto my-8 flex w-full max-w-[1320px] flex-col items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-6 sm:mx-auto sm:flex-row sm:items-center sm:px-6 lg:px-8 [margin-top:6px]">
+			<div>
+				<h2 class="mb-2 text-base font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Потрібна швидка консультація?
+				</h2>
+				<p class="mb-0 text-sm text-white/60 [color:#b3b8b2]">
+					Зателефонуйте майстру прямо зараз: +38 (063) 123 45 67 — зорієнтуємо за вартістю та
+					підберемо найближчий вільний час.
+				</p>
+			</div>
+			<Button href="tel:+380631234567">
+				<Phone size={19} />
+				Зателефонувати майстру
+			</Button>
+		</section>
+	</div>
+</Layout>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('#online-booking')!;
+	const steps = [...form.querySelectorAll<HTMLFieldSetElement>('[data-step]')];
+	const next = document.querySelector<HTMLButtonElement>('#booking-next')!;
+	const back = document.querySelector<HTMLButtonElement>('#booking-back')!;
+	let step = 0;
+	const field = (name: string) => (form.elements.namedItem(name) as HTMLInputElement).value.trim();
+	const date = form.elements.namedItem('date') as HTMLInputElement;
+	const today = new Date();
+	date.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+	function chosen() {
+		return [...form.querySelectorAll<HTMLInputElement>('[name="services"]:checked')];
+	}
+	function update() {
+		document.querySelector('#summary-services')!.textContent =
+			chosen()
+				.map((input) => input.value)
+				.join(', ') || 'Не обрано';
+		document.querySelector('#summary-total')!.textContent = chosen().length
+			? 'від ' +
+				chosen()
+					.reduce((sum, input) => sum + Number(input.dataset.cost), 0)
+					.toLocaleString('uk-UA') +
+				' ₴'
+			: 'Не розраховано';
+		document.querySelector('#summary-car')!.textContent =
+			[field('make'), field('model'), field('year')].filter(Boolean).join(' ') || 'Не вказано';
+		document.querySelector('#summary-date')!.textContent =
+			[field('date'), field('time')].filter(Boolean).join(' · ') || 'Не обрано';
+		document.querySelector('#summary-contact')!.textContent =
+			[field('name'), field('phone')].filter(Boolean).join(' · ') || 'Не заповнено';
+	}
+	function show() {
+		steps.forEach((panel, i) => (panel.hidden = i !== step));
+		document.querySelectorAll<HTMLElement>('[data-progress]').forEach((item, i) => {
+			item.classList.toggle('active', i <= step);
+			if (i === step) item.setAttribute('aria-current', 'step');
+			else item.removeAttribute('aria-current');
+		});
+		back.disabled = step === 0;
+		next.textContent = step === 3 ? 'Зберегти запит →' : 'Далі →';
+		steps[step].querySelector<HTMLElement>('input,select')?.focus();
+	}
+	function advance() {
+		if (step === 0 && !chosen().length) {
+			document.querySelector<HTMLElement>('#service-error')!.hidden = false;
+			return;
+		}
+		document.querySelector<HTMLElement>('#service-error')!.hidden = true;
+		const invalid = [
+			...steps[step].querySelectorAll<HTMLInputElement | HTMLSelectElement>('input,select'),
+		].find((input) => !input.checkValidity());
+		if (invalid) {
+			invalid.reportValidity();
+			return;
+		}
+		if (step < 3) {
+			step++;
+			show();
+			return;
+		}
+		try {
+			localStorage.setItem(
+				'autofix-online-booking',
+				JSON.stringify({
+					services: chosen().map((input) => input.value),
+					make: field('make'),
+					model: field('model'),
+					year: field('year'),
+					notes: field('notes'),
+					date: field('date'),
+					time: field('time'),
+					name: field('name'),
+					phone: field('phone'),
+				}),
+			);
+			steps.forEach((panel) => (panel.hidden = true));
+			form.querySelector<HTMLElement>('.booking-navigation')!.hidden = true;
+			form.querySelector<HTMLElement>('.booking-progress')!.hidden = true;
+			document.querySelector<HTMLElement>('#booking-storage-error')!.hidden = true;
+			document.querySelector<HTMLElement>('#online-booking-success')!.hidden = false;
+		} catch {
+			document.querySelector<HTMLElement>('#booking-storage-error')!.hidden = false;
+		}
+	}
+	next.addEventListener('click', advance);
+	back.addEventListener('click', () => {
+		if (step > 0) {
+			step--;
+			show();
+		}
+	});
+	form.addEventListener('submit', (event) => {
+		event.preventDefault();
+		advance();
+	});
+	form.addEventListener('input', update);
+	form.addEventListener('change', update);
+	const requested = new URLSearchParams(location.search).get('service');
+	if (requested) {
+		form
+			.querySelectorAll<HTMLInputElement>('[name="services"]')
+			.forEach((input) => (input.checked = input.value === requested));
+	}
+	update();
+	back.disabled = true;
+</script>

@@ -1,0 +1,29 @@
+---
+/** Таблиця графіку роботи: дні тижня та години. */
+import { CalendarDays } from 'lucide-react';
+import { schedule } from '../../data';
+
+interface Props {
+	class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<dl class:list={['space-y-2', className]}>
+	{schedule.map(([day, hours], i) => (
+		<div class="flex items-center justify-between border-b border-white/10 pb-2 text-sm">
+			<dt class="flex items-center gap-2 text-white/80">
+				<CalendarDays size={16} class="text-[#f44336]" />
+				{day}
+			</dt>
+			<dd
+				class:list={[
+					'm-0 font-semibold',
+					i === schedule.length - 1 ? 'text-[#f44336]' : 'text-white',
+				]}
+			>
+				{hours}
+			</dd>
+		</div>
+	))}
+</dl>

@@ -1,0 +1,319 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import FaqList from '../components/ui/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/ui/Button.astro';
+import {
+	ArrowRight,
+	CalendarDays,
+	Car,
+	Check,
+	Clock,
+	Cog,
+	Phone,
+	ShieldCheck,
+	Wrench,
+} from 'lucide-react';
+import { prices } from '../data';
+
+const categories = Object.entries(prices);
+const icons = [Wrench, Cog, Car, ShieldCheck, Cog, Cog, Clock, Car];
+
+const images = [
+	'oil',
+	'diagnostics',
+	'brakes',
+	'brakes',
+	'engine',
+	'diagnostics',
+	'engine',
+	'tires',
+];
+
+const metrics = [
+	{
+		icon: ShieldCheck,
+		title: 'Фіксована ціна',
+		text: 'Кошторис у заказ-наряді без прихованих доплат',
+	},
+	{
+		icon: Check,
+		title: 'Гарантія 12 місяців',
+		text: 'Офіційні зобов’язання на деталі та роботу',
+	},
+	{
+		icon: Clock,
+		title: 'Точний прорахунок',
+		text: 'Оцінка за 15 хв за VIN-кодом або моделлю',
+	},
+	{
+		icon: Cog,
+		title: 'Власний склад деталей',
+		text: 'Оригінали та перевірені аналоги за чесною ціною',
+	},
+];
+
+const faq: [string, string][] = [
+	[
+		'Від чого залежить остаточна вартість ремонту?',
+		'Вартість залежить від марки, моделі та року авто, конструктивної складності доступу до вузлів і обраних деталей (оригінал чи ліцензійний аналог). Точний кошторис ми фіксуємо в заказ-наряді перед початком робіт, і він не змінюється без вашої згоди.',
+	],
+	[
+		'Чи входять запчастини та рідини у вартість прайсу?',
+		'У прайс-листі наведено вартість роботи майстра. Запчастини, моторне масло та витратні матеріали ви можете обрати з нашого складу за оптовими цінами імпортерів (Bosch, Lemförder, Motul) або надати власні.',
+	],
+	[
+		'Чи надаєте ви гарантію на роботи та деталі?',
+		'Так. Ми надаємо офіційну письмову гарантію 12 місяців або 20 000 км пробігу на всі виконані роботи та запчастини, придбані у нашому автосервісі. Усі умови фіксуються в акті.',
+	],
+	[
+		'Що робити, якщо під час ремонту виявляться приховані несправності?',
+		'Жодної самодіяльності. Майстер фіксує дефект на фото або відео, надсилає у Telegram чи Viber, називає точну вартість деталей та роботи й береться за справу лише після вашого підтвердження.',
+	],
+	[
+		'Як швидко я можу отримати точний прорахунок для мого авто?',
+		'Залиште онлайн-заявку або зателефонуйте нам: +38 (063) 123 45 67. Назвіть марку, модель чи VIN-код — майстер підбере варіанти запчастин і прорахує точний кошторис за 10–15 хвилин.',
+	],
+];
+
+const packages = [
+	{
+		icon: Wrench,
+		title: 'Базове ТО',
+		text: 'Заміна моторного масла, масляного фільтра та огляд рівнів рідин',
+		price: '450',
+	},
+	{
+		icon: Cog,
+		title: 'Комплексне ТО',
+		text: 'Заміна масла, 3 фільтрів (масло, повітря, салон) + діагностика 24 точок',
+		price: '950',
+		popular: true,
+	},
+	{
+		icon: ShieldCheck,
+		title: 'Повний сервіс & Безпека',
+		text: 'Комплексне ТО + діагностика гальм, комп’ютерне сканування та перевірка АКБ',
+		price: '1 450',
+	},
+];
+---
+
+<Layout title="Ціни">
+	<div class="services-page pricing-page text-[#f4f3ef] [padding-bottom:28px]">
+		<PageHero
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Ціни' }]}
+			intro="Чесний прайс-лист без прихованих платежів і зірочок. Фіксуємо кошторис до початку ремонту та даємо гарантію 12 міс."
+		>
+			<Fragment slot="title">
+				Прозорі <span>ціни</span> на послуги
+			</Fragment>
+			<Button data-book>
+				<CalendarDays size={19} />
+				Записатись на сервіс <ArrowRight size={17} />
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} aria-label="Умови прайсу" />
+
+		<section class="container pricing-content mx-auto w-full max-w-[1320px] px-4 py-8 sm:px-6 md:py-12 lg:px-8 [padding-block:28px_0]">
+			<div class="pricing-toolbar mb-5 flex items-center justify-between gap-[25px] [@media(max-width:600px)]:flex-col [@media(max-width:600px)]:items-start [@media(max-width:600px)]:gap-[13px]">
+				<h2 class="mb-0 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Оберіть <span class="text-[#f44336]">категорію</span> послуг
+				</h2>
+			</div>
+			<div
+				class="mb-8 grid grid-cols-2 gap-2.5 min-[440px]:grid-cols-4 sm:gap-3 lg:grid-cols-8"
+				role="group"
+				aria-label="Категорії прайсу"
+			>
+				{categories.map(([name], i) => {
+					const I = icons[i];
+					return (
+						<button
+							class:list={[
+								'flex min-h-[72px] flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-[#111618] p-2.5 text-center text-sm font-medium text-white/80 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336] hover:border-[#f44336] hover:text-white sm:min-h-[84px] [&.selected]:border-[#f44336] [&.selected]:bg-[#f44336] [&.selected]:font-bold [&.selected]:text-[#111]',
+								{ selected: i === 0 },
+							]}
+							data-price-category={i}
+							aria-pressed={i === 0}
+						>
+							<I size={22} />
+							<span class="text-center leading-tight">{name}</span>
+						</button>
+					);
+				})}
+			</div>
+			{categories.map(([category, rows], i) => (
+				<section
+					class="pricing-category-panel"
+					data-price-panel={i}
+					hidden={i !== 0}
+					aria-label={category}
+				>
+					<div class="pricing-feature-row mb-6 grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
+						<div class="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 bg-[#111618] sm:grid-cols-[240px_1fr]">
+							<div class="relative aspect-[16/10] w-full overflow-hidden sm:aspect-auto sm:h-full">
+								<img
+									class="h-full w-full object-cover"
+									src={'/images/' + images[i] + '.jpg'}
+									alt={category}
+								/>
+								<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#111618] via-transparent to-transparent sm:hidden" />
+							</div>
+							<div class="flex flex-col justify-center p-5 sm:p-6">
+								<h2 class="mb-2 text-base font-bold tracking-tight text-white sm:text-2xl">
+									{category}
+								</h2>
+								<p class="mb-4 text-sm leading-relaxed text-[#b3b8b2]">
+									Професійне обслуговування вашого автомобіля. Обсяг робіт та остаточну вартість
+									погоджуємо заздалегідь.
+								</p>
+								<div class="grid grid-cols-3 gap-2 border-t border-white/10 pt-4 text-sm">
+									<span class="flex items-center gap-1.5 font-medium text-white/80">
+										<Wrench className="shrink-0 text-[#f44336]" size={16} />
+										<span>Якісна робота</span>
+									</span>
+									<span class="flex items-center gap-1.5 font-medium text-white/80">
+										<Clock className="shrink-0 text-[#f44336]" size={16} />
+										<span>Узгоджені терміни</span>
+									</span>
+									<span class="flex items-center gap-1.5 font-medium text-white/80">
+										<ShieldCheck className="shrink-0 text-[#f44336]" size={16} />
+										<span>Гарантія 12 міс.</span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<aside class="hidden flex-col justify-between rounded-2xl border border-white/10 bg-[#111618] p-5 sm:p-6 lg:flex">
+							<div>
+								<h3 class="mb-2 text-base font-bold text-white">Потрібна консультація?</h3>
+								<p class="mb-4 text-sm leading-relaxed text-[#b3b8b2]">
+									Допоможемо підібрати оптимальне рішення для вашого авто.
+								</p>
+							</div>
+							<Button data-book data-service="Потрібна консультація" class="w-full">
+								<Phone size={16} />
+								Зв’язатися <ArrowRight size={15} />
+							</Button>
+						</aside>
+					</div>
+					<div class="mb-6 overflow-x-auto rounded-2xl border border-white/10 bg-[#111618] [scrollbar-width:thin] [scrollbar-color:rgba(244,67,54,0.4)_transparent]">
+						<table class="w-full min-w-[480px] border-collapse text-left text-sm sm:min-w-0">
+							<thead>
+								<tr class="border-b border-white/10 bg-white/[0.04]">
+									<th class="px-4 py-3 text-sm font-semibold text-white/70">Послуга</th>
+									<th class="whitespace-nowrap px-4 py-3 text-sm font-semibold text-white/70">
+										Ціна
+									</th>
+									<th class="px-4 py-3 text-right text-sm font-semibold text-white/70">Дія</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-white/5">
+								{rows.map(([name, price]) => (
+									<tr
+										class="transition hover:bg-white/[0.02]"
+										data-price-name={name.toLocaleLowerCase('uk-UA')}
+									>
+										<td class="px-4 py-3 text-sm font-medium text-white/90">{name}</td>
+										<td class="whitespace-nowrap px-4 py-3 text-sm font-bold text-[#f44336]">
+											від {price.toLocaleString('uk-UA')} ₴
+										</td>
+										<td class="px-4 py-2 text-right">
+											<Button
+												size="sm"
+												data-book
+												data-service={category}
+												class="whitespace-nowrap border-[#f44336]/40 bg-[#f44336]/10 font-semibold text-white hover:bg-[#f44336] hover:text-black"
+											>
+												Записатись <ArrowRight size={13} class="hidden sm:inline" />
+											</Button>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</section>
+			))}
+		</section>
+
+		<section class="container mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-4 px-4 py-10 sm:px-6 md:grid-cols-3 lg:grid-cols-[220px_repeat(3,minmax(0,1fr))] lg:gap-5 lg:px-8">
+			<div class="self-center md:col-span-3 lg:col-span-1">
+				<h2 class="mb-2 text-2xl font-bold tracking-tight text-white">
+					Пакетні <span class="text-[#f44336]">пропозиції</span>
+				</h2>
+				<p class="mb-0 text-sm leading-relaxed text-[#b3b8b2]">
+					Комплексне обслуговування з вигодою до 25%.
+				</p>
+			</div>
+			{packages.map(({ icon: I, title, text, price, popular: isPopular }) => (
+				<button
+					class:list={[
+						'group relative flex min-h-[190px] flex-col items-start rounded-2xl border border-white/10 bg-[#111618] p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:border-[#f44336]/60 hover:shadow-xl hover:shadow-black/40',
+						{ 'border-[#f44336]/50 bg-[#111618]/90': isPopular },
+					]}
+					data-book
+					data-service="Технічне обслуговування"
+				>
+					<div class="flex w-full items-center justify-between">
+						<span class="flex size-9 items-center justify-center rounded-lg border border-[#f44336]/30 bg-[#f44336]/10 text-[#f44336]">
+							<I size={18} />
+						</span>
+						{isPopular && (
+							<span class="rounded-full border border-[#f44336]/40 bg-[#f44336]/10 px-2.5 py-0.5 font-bold uppercase tracking-wider text-[#f44336]">
+								Популярний
+							</span>
+						)}
+					</div>
+					<strong class="mb-1.5 mt-3 text-base font-bold text-white">{title}</strong>
+					<p class="mb-4 text-sm leading-relaxed text-[#b3b8b2]">{text}</p>
+					<div class="mt-auto flex w-full items-center justify-between gap-3 border-t border-white/10 pt-3">
+						<span class="text-sm font-bold text-[#f44336]">від {price} ₴</span>
+						<span class="text-white/60 transition group-hover:translate-x-1 group-hover:text-[#f44336]">
+							<ArrowRight size={16} />
+						</span>
+					</div>
+				</button>
+			))}
+		</section>
+
+		<section class="container catalog-faq mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-5 px-4 py-10 sm:px-6 md:grid-cols-[0.7fr_1.3fr] lg:px-8">
+			<h2 class="text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Часті <br class="hidden md:block" />
+				запитання<span class="mt-4 block h-1 w-20 rotate-[-4deg] rounded-full bg-[#f44336]"></span>
+			</h2>
+			<FaqList items={faq} />
+		</section>
+
+		<CtaBand buttonLabel="Записатись на сервіс">
+			<Fragment slot="title">
+				Запишіться на обслуговування <br />
+				<span>за погодженою ціною</span>
+			</Fragment>
+			<Fragment slot="text">
+				Фіксуємо кошторис до початку робіт та даємо офіційну гарантію 12 місяців.
+			</Fragment>
+		</CtaBand>
+	</div>
+</Layout>
+
+<script>
+	const buttons = document.querySelectorAll<HTMLButtonElement>('[data-price-category]');
+	const panels = document.querySelectorAll<HTMLElement>('[data-price-panel]');
+	let active = '0';
+	buttons.forEach((button) =>
+		button.addEventListener('click', () => {
+			active = button.dataset.priceCategory!;
+			buttons.forEach((item) => {
+				item.classList.toggle('selected', item === button);
+				item.setAttribute('aria-pressed', String(item === button));
+			});
+			panels.forEach((panel) => {
+				panel.hidden = panel.dataset.pricePanel !== active;
+			});
+		}),
+	);
+</script>

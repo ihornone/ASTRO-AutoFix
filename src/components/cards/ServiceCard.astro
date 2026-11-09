@@ -1,0 +1,86 @@
+---
+/**
+ * Картка послуги в каталозі.
+ * variant="catalog" — з описом і футером «від X ₴ / Детальніше →» (сторінка Послуги);
+ * variant="popular" — компактна, футер «Від X ₴» + кругла стрілка (головна).
+ */
+import { ArrowRight } from 'lucide-react';
+
+interface Service {
+	slug: string;
+	title: string;
+	description: string;
+	image: string;
+	price: number;
+}
+
+interface Props {
+	service: Service;
+	variant?: 'catalog' | 'popular';
+	class?: string;
+}
+
+const { service, variant = 'catalog', class: className, ...rest } = Astro.props;
+---
+
+<a
+	class:list={[
+		'group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111618] transition duration-300 hover:-translate-y-1 hover:border-[#f44336]/60 hover:shadow-xl hover:shadow-black/40 focus-visible:outline-2 focus-visible:outline-[#f44336]',
+		className,
+	]}
+	href={'/services/' + service.slug + '/'}
+	{...rest}
+>
+	<div class="relative aspect-[16/10] w-full overflow-hidden bg-[#171b1d]">
+		<img
+			class="h-full w-full object-cover brightness-90 transition duration-500 group-hover:scale-105"
+			src={'/images/' + service.image + '.jpg'}
+			alt={service.title}
+			loading="lazy"
+			decoding="async"
+		/>
+		<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--bg-card,#111618)] via-transparent to-transparent" />
+		{variant === 'catalog' && (
+			<span class="absolute right-3 top-3 flex size-8 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white transition group-hover:border-[#f44336] group-hover:bg-[#f44336] group-hover:text-black">
+				<ArrowRight size={15} />
+			</span>
+		)}
+	</div>
+	<div class="flex flex-1 flex-col p-5">
+		<h3
+			class:list={[
+				'font-bold leading-snug text-white transition-colors group-hover:text-[#f44336]',
+				variant === 'popular' ? 'mb-3 text-sm' : 'mb-2 text-base',
+			]}
+		>
+			{service.title}
+		</h3>
+		{variant === 'catalog' && (
+			<p class="mb-4 flex-1 text-sm leading-relaxed text-[#b3b8b2]">{service.description}</p>
+		)}
+		<div
+			class:list={[
+				'mt-auto flex items-center justify-between gap-2 border-t border-white/10 pt-3 text-sm',
+				variant === 'popular' && 'pt-3',
+			]}
+		>
+			{variant === 'popular' ? (
+				<span class="text-[#b3b8b2]">
+					Від{' '}
+					<strong class="font-bold text-white transition-colors group-hover:text-[#f44336]">
+						{service.price.toLocaleString('uk-UA')} ₴
+					</strong>
+				</span>
+			) : (
+				<span class="font-bold text-[#f44336]">від {service.price} ₴</span>
+			)}
+			{variant === 'popular' ? (
+				<span class="flex size-7 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-colors group-hover:border-[#f44336] group-hover:bg-[#f44336] group-hover:text-black">
+					<ArrowRight size={14} />
+				</span>
+			) : (
+				<span class="text-white/60 transition-colors group-hover:text-white">Детальніше →</span>
+			)}
+		</div>
+	</div>
+</a>

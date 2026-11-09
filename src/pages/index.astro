@@ -1,0 +1,543 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/ui/Section.astro';
+import Button from '../components/ui/Button.astro';
+import FeatureCard from '../components/ui/FeatureCard.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import MapEmbed from '../components/ui/MapEmbed.astro';
+import ScheduleList from '../components/ui/ScheduleList.astro';
+import SocialLinks from '../components/ui/SocialLinks.astro';
+import ServiceCard from '../components/cards/ServiceCard.astro';
+import WorkCard from '../components/cards/WorkCard.astro';
+import ReviewCard from '../components/cards/ReviewCard.astro';
+import TeamCard from '../components/cards/TeamCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import {
+	ArrowRight,
+	CalendarDays,
+	Car,
+	Check,
+	Clock,
+	Cog,
+	MapPin,
+	Phone,
+	ShieldCheck,
+	Star,
+	Wrench,
+} from 'lucide-react';
+import { services } from '../data';
+
+const icons = {
+	car: Car,
+	clock: Clock,
+	tool: Wrench,
+	shield: ShieldCheck,
+	gear: Cog,
+	check: Check,
+};
+
+const popular = ['diagnostics', 'maintenance', 'brakes', 'suspension', 'air-conditioning'].map(
+	(slug) => services.find((service) => service.slug === slug)!,
+);
+
+const advantages = [
+	{
+		icon: Cog,
+		title: 'Фіксований кошторис',
+		text: 'Погоджуємо вартість робіт і деталей до старту ремонту — без сюрпризів у фінальному чеку',
+	},
+	{
+		icon: Wrench,
+		title: 'Дилерське обладнання',
+		text: 'Точна діагностика сканерами та стендами без заміни справних деталей навмання',
+	},
+	{
+		icon: ShieldCheck,
+		title: 'Офіційна гарантія',
+		text: 'Письмова гарантія на 12 місяців або 20 000 км на всі виконані роботи та запчастини',
+	},
+	{
+		icon: Clock,
+		title: 'Вчасна видача авто',
+		text: 'Повертаємо автомобіль точно в узгоджений термін. Запізнення — за наш рахунок',
+	},
+];
+
+const aboutPoints = [
+	'Фіксований кошторис у заказ-наряді до початку робіт',
+	'Відеофіксація дефектів і нових деталей у месенджер',
+	'Власний склад оригінальних та ліцензійних деталей',
+	'Письмова гарантія 12 місяців на всі послуги',
+];
+
+const steps = [
+	{
+		icon: CalendarDays,
+		title: 'Онлайн-запис без черг',
+		text: 'Обираєте зручний день і час на сайті. Підтверджуємо запис за 10 хвилин',
+	},
+	{
+		icon: Cog,
+		title: 'Огляд і відеофіксація',
+		text: 'Діагностуємо при вас або надсилаємо детальне відео несправностей у Telegram / Viber',
+	},
+	{
+		icon: Wrench,
+		title: 'Погоджений ремонт',
+		text: 'Встановлюємо сертифіковані запчастини за затвердженим із вами кошторисом',
+	},
+	{
+		icon: Check,
+		title: 'Контроль і гарантія',
+		text: 'Проводимо вихідний тест-драйв, віддаємо замінені деталі та виписуємо гарантійний талон',
+	},
+];
+
+const reviews = [
+	[
+		'АК',
+		'Андрій К. (VW Passat B8)',
+		'З’явився глухий стукіт спереду. На іншому сервісі приговорили стійки в зборі. Хлопці в AutoFix знайшли тріснуту втулку стабілізатора, показали відео у Viber і зекономили мені понад 8 000 грн. Дякую за порядність!',
+	],
+	[
+		'ОМ',
+		'Олена М. (Skoda Octavia A7)',
+		'Робила велике планове ТО. Дуже сподобалося, що в майстерні ідеальна чистота, каністри з маслом відкривали при мені, а старі фільтри поклали в багажник. Оформили за 50 хвилин з кавою.',
+	],
+	[
+		'ІД',
+		'Ігор Д. (BMW 520d G30)',
+		'Замовляв комплексну діагностику перед купівлею. Виявили приховане підтікання сальника колінвала та скручений пробіг по блоках — це допомогло збити ціну у продавця на $1 200. Профі найвищого рівня!',
+	],
+	[
+		'МР',
+		'Максим Р. (Audi A6)',
+		'Робив капремонт ходової. Кошторис розписали до гривні ще до початку ремонту. Жодної копійки зверху не додали. Машина їде м’яко й тихо, як із салону. Всім раджу!',
+	],
+	[
+		'СВ',
+		'Сергій В. (Renault Megane 4)',
+		'Кондиціонер перестав дути холодним. Замість простого доливу фреону перевірили систему азотом, знайшли мікротріщину в трубці, запаяли й заправили за вагою. Працює ідеально!',
+	],
+	[
+		'ІС',
+		'Ірина С. (Toyota RAV4)',
+		'Перше СТО, де зі мною спілкувалися зрозумілою мовою без зарозумілого сленгу. Записалася онлайн, машину прийняли рівно о 09:30 без черги й повернули точно в зазначений час.',
+	],
+] as const;
+
+const works = [
+	{
+		title: 'Ремонт двигуна та заміна ГРМ',
+		description: 'Заміна комплекту ГРМ із помпою, сальників колінвала та регулювання фаз.',
+		image: 'engine',
+		car: 'Volkswagen Passat 2.0 TDI',
+		time: '1 робочий день',
+	},
+	{
+		title: 'Обслуговування гальмівної системи',
+		description: 'Встановлення дисків і колодок Brembo, ревізія та змащення супортів.',
+		image: 'brakes',
+		car: 'BMW 5 Series (G30)',
+		time: '3 години',
+	},
+	{
+		title: 'Комплексне планове ТО',
+		description: 'Заміна масла Motul за допуском 504/507, 3 фільтри та перевірка 24 пунктів.',
+		image: 'oil',
+		car: 'Skoda Octavia A7',
+		time: '45 хвилин',
+	},
+];
+
+const team = [
+	{
+		name: 'Олександр Мельник',
+		description: 'Керівник сервісу · 14 років досвіду в авторемонті та контролі якості',
+		image: 'team-manager',
+		icon: Phone,
+	},
+	{
+		name: 'Тарас Коваль',
+		description: 'Провідний моторист · спеціаліст з двигунів VAG, BMW, PSA та Ford',
+		image: 'team-mechanic',
+		icon: Wrench,
+	},
+	{
+		name: 'Юрій Бойко',
+		description: 'Автоелектрик-діагност · дилерські сканери, ендоскопія, CAN-шини',
+		image: 'team-diagnostic',
+		icon: Cog,
+	},
+	{
+		name: 'Михайло Гринів',
+		description: 'Майстер підвіски та кермового керування · 3D-розвал і гальма',
+		image: 'team-suspension',
+		icon: Car,
+	},
+];
+
+const whereContacts = [
+	{ icon: Phone, title: 'Телефон майстра', text: '+38 (063) 123 45 67' },
+	{
+		icon: MapPin,
+		title: 'Адреса у Львові',
+		text: 'м. Львів, вул. Городоцька, 224 (зручний заїзд з головної дороги)',
+	},
+	{ icon: Clock, title: 'Графік роботи', text: 'Пн–Сб: 08:30–19:30, Нд: 09:00–16:00' },
+];
+
+const landingMetrics = [
+	{ icon: ShieldCheck, title: '12 міс.', text: 'офіційна гарантія' },
+	{ icon: Clock, title: '08:30–19:30', text: 'працюємо без вихідних' },
+	{ icon: Wrench, title: '45 хвилин', text: 'експрес-ТО авто' },
+	{ icon: Car, title: '4.9 / 5.0', text: '480+ відгуків у Google' },
+];
+
+const offersPair = [
+	{
+		title: 'Сезонний шиномонтаж + балансування',
+		text: 'Перевзування 4 коліс із точністю до 1 г + діагностика гальм у подарунок.',
+		discount: '15',
+		service: 'Шиномонтаж',
+	},
+	{
+		title: 'Комплексна перевірка підвіски',
+		text: 'Огляд 24 вузлів ходової та комп’ютерний тест зі знижкою при ремонті.',
+		discount: '20',
+		service: 'Діагностика автомобіля',
+	},
+];
+---
+
+<Layout>
+	<div class="services-page landing-page text-[#f4f3ef] [&_h2_span]:[color:#f44336] [padding-bottom:28px]">
+		{/* Головний банер */}
+		<section class="catalog-hero landing-hero relative after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:z-[1] after:h-36 after:bg-gradient-to-b after:from-transparent after:to-[#080b0d] after:content-[''] flex min-h-[100svh] flex-col justify-center overflow-hidden px-0 pb-8 pt-24 [min-height:100vh] [min-height:100svh] [padding-top:85px] [padding-bottom:48px] [&_h1]:[line-height:1.05] [&_h1]:[font-weight:700] [&_h1]:[letter-spacing:-0.045em] [&_h1]:[margin:0_0_26px] [&_p]:[line-height:1.55] [&_p]:[margin-bottom:42px] [&_.catalog-actions]:[gap:30px] [@media(max-width:760px)]:[padding-top:90px] [@media(max-width:760px)]:[&_h1_br]:[display:none] [@media(max-width:760px)]:[&_h1]:[max-width:540px] [@media(max-width:480px)]:[&_p]:[margin-bottom:26px] [@media(max-width:480px)]:[&_p_br]:[display:none] [@media(max-width:480px)]:[&_.catalog-actions]:[flex-wrap:wrap]">
+			<img
+				class="absolute inset-0 h-full w-full object-cover object-[62%_center] brightness-50 [display:block] [width:100%] [object-fit:cover]"
+				src="/images/hero.jpg"
+				alt="Автомобіль у майстерні AutoFix"
+				fetchpriority="high"
+			/>
+			<div class="container catalog-hero-copy relative z-10 mx-auto my-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 lg:px-8">
+				<h1 class="mb-5 max-w-3xl text-2xl font-bold leading-[1.05] tracking-[-0.06em] [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance] [&_span]:[color:var(--red)]">
+					Чесний автосервіс
+					<br class="hidden sm:block" /> <span>у Львові</span> з гарантією 12 міс.
+				</h1>
+				<p class="mb-7 max-w-xl text-sm leading-6 text-white/80 sm:text-base [color:#b3b8b2]">
+					Повний цикл обслуговування авто без нав’язаних послуг. Погоджуємо кошторис до початку
+					робіт, надсилаємо фотозвіт у Telegram/Viber і відповідаємо за результат.
+				</p>
+				<div class="catalog-actions flex flex-wrap gap-3">
+					<Button href="/booking/">
+						<CalendarDays size={19} />
+						Записатись на сервіс <ArrowRight size={17} />
+					</Button>
+					<Button variant="outline" href="/prices/">
+						<Wrench size={20} />
+						Калькулятор цін
+					</Button>
+				</div>
+			</div>
+			<MetricStrip items={landingMetrics} />
+		</section>
+
+		{/* Чому нам довіряють */}
+		<section class="container mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8">
+			<div class="grid grid-cols-1 items-stretch gap-6 md:grid-cols-2 lg:gap-8">
+				<a
+					href="/about/"
+					class="group relative block min-h-[260px] overflow-hidden rounded-2xl border border-white/10 bg-[#111618] transition focus-visible:outline-2 focus-visible:outline-[#f44336] hover:border-[#f44336]/60 sm:min-h-[320px] md:min-h-full"
+				>
+					<img
+						class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+						src="/images/workshop.jpg"
+						alt="Майстерня AutoFix"
+						loading="lazy"
+					/>
+					<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+					<span class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-lg border border-white/20 bg-black/60 px-3 py-1.5 text-sm font-medium text-white backdrop-blur-md">
+						<span class="size-2 rounded-full bg-[#f44336]"></span>Сучасна майстерня AutoFix
+					</span>
+				</a>
+				<div class="flex flex-col justify-center">
+					<h2 class="mb-5 text-2xl font-bold tracking-tight text-white">
+						Чому нам <span class="text-[#f44336]">довіряють</span>?
+					</h2>
+					<div class="grid grid-cols-1 gap-3">
+						{advantages.map((item) => (
+							<FeatureCard {...item} />
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		{/* Наші послуги */}
+		<Section link={{ href: '/services/', label: 'Всі послуги' }}>
+			<Fragment slot="title">
+				Наші <span class="text-[#f44336]">послуги</span>
+			</Fragment>
+			<div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+				{services.map((service) => {
+					const I =
+						service.slug === 'diagnostics' ? Cog : service.slug === 'maintenance' ? Check : Wrench;
+					return (
+						<a
+							class="group flex flex-col justify-between gap-3 rounded-2xl border border-white/10 bg-[#111618] p-4.5 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-[#f44336] hover:-translate-y-0.5 hover:border-[#f44336]/60 hover:shadow-lg hover:shadow-black/40 sm:p-5"
+							href={'/services/' + service.slug + '/'}
+						>
+							<div class="flex items-start justify-between gap-3">
+								<div class="flex min-w-0 items-center gap-3">
+									<span class="flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#f44336]/30 bg-[#f44336]/10 text-[#f44336] transition-colors group-hover:bg-[#f44336] group-hover:text-black">
+										<I size={20} />
+									</span>
+									<h3 class="text-sm font-bold leading-snug text-white transition-colors group-hover:text-[#f44336] sm:text-base">
+										{service.title}
+									</h3>
+								</div>
+								<span class="shrink-0 whitespace-nowrap rounded-lg border border-[#f44336]/40 bg-[#f44336]/10 px-2.5 py-1 text-sm font-bold text-[#f44336]">
+									від {service.price} ₴
+								</span>
+							</div>
+							<p class="m-0 text-sm leading-relaxed text-[#b3b8b2]">{service.description}</p>
+						</a>
+					);
+				})}
+			</div>
+		</Section>
+
+		{/* Знайомство з нашим СТО */}
+		<section class="container mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8">
+			<div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:gap-12">
+				<div>
+					<h2 class="mb-4 text-2xl font-bold leading-tight tracking-tight text-white">
+						Автосервіс, де поважають <span class="text-[#f44336]">ваш час і бюджет</span>
+					</h2>
+					<p class="mb-5 text-sm leading-relaxed text-[#b3b8b2] sm:text-base">
+						Ми створили AutoFix як відповідь типовим проблемам СТО: без раптових чеків, затягування
+						термінів і сумнівних деталей. Ви бачите кожен етап ремонту у відеозвіті й забираєте
+						справне авто точно в обумовлений час.
+					</p>
+					<ul class="mb-6 space-y-3">
+						{aboutPoints.map((point) => (
+							<li class="flex items-center gap-3 text-sm font-semibold text-white/90">
+								<span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#f44336]/15 text-[#f44336]">
+									<Check size={14} />
+								</span>
+								{point}
+							</li>
+						))}
+					</ul>
+					<Button href="/about/">
+						Дізнатися більше про сервіс <ArrowRight size={17} />
+					</Button>
+				</div>
+				<div class="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-white/10 bg-[#111618] sm:aspect-[4/3]">
+					<img
+						class="h-full w-full object-cover"
+						src="/images/hero.jpg"
+						alt="Робоча зона майстерні AutoFix"
+						loading="lazy"
+					/>
+					<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+				</div>
+			</div>
+		</section>
+
+		{/* Популярні послуги та ціни */}
+		<Section link={{ href: '/prices/', label: 'Повний прайс-лист' }}>
+			<Fragment slot="title">
+				Популярні <span class="text-[#f44336]">послуги</span> та ціни
+			</Fragment>
+			<div class="grid grid-cols-1 gap-3.5 min-[440px]:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-5">
+				{popular.map((service) => (
+					<ServiceCard service={service} variant="popular" />
+				))}
+			</div>
+		</Section>
+
+		{/* Запишись на обслуговування */}
+		<section class="container mx-auto w-full max-w-[1320px] px-4 py-6 sm:px-6 lg:px-8">
+			<div class="relative isolate flex flex-col items-start gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111618] p-6 before:absolute before:inset-0 before:z-0 before:bg-[linear-gradient(90deg,#111618_0%,rgba(17,22,24,0.96)_34%,rgba(17,22,24,0.72)_57%,rgba(17,22,24,0.18)_100%),url(/images/workshop.jpg)] before:bg-cover before:bg-center before:content-[''] sm:p-8 md:p-10">
+				<h2 class="relative z-10 mb-0 text-2xl font-bold tracking-tight text-white">
+					Потрібен терміновий ремонт або <span class="text-[#f44336]">планове ТО?</span>
+				</h2>
+				<p class="relative z-10 mb-2 max-w-xl text-sm leading-relaxed text-[#b3b8b2]">
+					Запишіться онлайн за 1 хвилину — підберемо зручний час, назвемо вартість деталей і
+					приймемо авто без черги.
+				</p>
+				<div class="relative z-10 flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
+					<Button href="/booking/">
+						<CalendarDays size={18} />
+						Записатись на сервіс <ArrowRight size={17} />
+					</Button>
+					<Button variant="outline" href="/contacts/">
+						Зв’язатись з нами
+					</Button>
+				</div>
+			</div>
+		</section>
+
+		{/* Наші роботи */}
+		<Section link={{ href: '/gallery/', label: 'Дивитися всі кейси' }}>
+			<Fragment slot="title">
+				Приклади <span class="text-[#f44336]">виконаних робіт</span>
+			</Fragment>
+			<div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+				{works.map((work) => (
+					<WorkCard {...work} />
+				))}
+			</div>
+		</Section>
+
+		{/* Акції та спеціальні пропозиції */}
+		<Section link={{ href: '/offers/', label: 'Всі акції' }}>
+			<Fragment slot="title">
+				Акції та спеціальні <span class="text-[#f44336]">пропозиції</span>
+			</Fragment>
+			<article class="relative flex min-h-[260px] flex-col justify-center overflow-hidden rounded-2xl border border-white/10 bg-[#111618] p-6 sm:min-h-[300px] sm:p-10">
+				<img
+					class="absolute inset-0 h-full w-full object-cover object-[75%_center] opacity-25"
+					src="/images/oil.jpg"
+					alt="Комплексне ТО зі знижкою"
+				/>
+				<div class="absolute inset-0 bg-gradient-to-r from-[#111618] via-[#111618]/90 to-transparent"></div>
+				<div class="relative z-10 max-w-lg">
+					<span class="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#f44336] px-3 py-1 text-sm font-bold text-[#111]">
+						<Star size={14} />
+						Топ пропозиція
+					</span>
+					<h3 class="mb-2 text-2xl font-bold leading-tight tracking-tight text-white">
+						Комплексне ТО зі знижкою <span class="text-[#f44336]">20%</span>
+					</h3>
+					<p class="mb-5 text-sm leading-relaxed text-[#d7ddd9]">
+						Заміна моторного масла, 3 фільтрів та повна діагностика ходової у подарунок.
+					</p>
+					<Button href="/booking/?service=Технічне обслуговування">
+						<CalendarDays size={17} />
+						Записатись на ТО <ArrowRight size={16} />
+					</Button>
+				</div>
+				<span class="absolute right-4 top-4 inline-flex size-16 rotate-3 flex-col items-center justify-center bg-[#f44336] text-center text-[#111] shadow-lg shadow-[#f44336]/30 [clip-path:polygon(100%_50%,89.6%_60.6%,93.3%_75%,79%_79%,75%_93.3%,60.6%_89.6%,50%_100%,39.4%_89.6%,25%_93.3%,21%_79%,6.7%_75%,10.4%_60.6%,0%_50%,10.4%_39.4%,6.7%_25%,21%_21%,25%_6.7%,39.4%_10.4%,50%_0%,60.6%_10.4%,75%_6.7%,79%_21%,93.3%_25%,89.6%_39.4%)] sm:right-6 sm:top-6 sm:size-20">
+					<span class="text-lg font-extrabold leading-none sm:text-xl">−20%</span>
+					<span class="mt-0.5 text-[9px] font-bold uppercase tracking-wider sm:text-[10px]">
+						знижка
+					</span>
+				</span>
+			</article>
+			<div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+				{offersPair.map(({ title, text, discount, service }) => (
+					<article class="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-[#111618] p-5 transition hover:border-[#f44336]/50 sm:p-6">
+						<div class="mb-4 flex items-start justify-between gap-3">
+							<span class="inline-flex items-center gap-1.5 rounded-full border border-[#f44336]/30 bg-[#f44336]/10 px-3 py-1 text-sm font-bold text-[#f44336]">
+								−{discount}% знижка
+							</span>
+						</div>
+						<h3 class="mb-2 text-base font-bold leading-snug text-white">{title}</h3>
+						<p class="mb-5 text-sm leading-relaxed text-[#b3b8b2]">{text}</p>
+						<div class="mt-auto">
+							<Button
+								variant="outline"
+								size="sm"
+								href={'/booking/?service=' + encodeURIComponent(service)}
+							>
+								Записатись <ArrowRight size={15} />
+							</Button>
+						</div>
+					</article>
+				))}
+			</div>
+		</Section>
+
+		{/* Наші спеціалісти */}
+		<Section link={{ href: '/about/', label: 'Про команду' }}>
+			<Fragment slot="title">
+				Наші <span class="text-[#f44336]">спеціалісти</span>
+			</Fragment>
+			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+				{team.map((member) => (
+					<TeamCard {...member} />
+				))}
+			</div>
+		</Section>
+
+		{/* Що говорять наші клієнти */}
+		<Section link={{ href: '/reviews/', label: 'Всі відгуки' }}>
+			<Fragment slot="title">
+				Що говорять наші <span class="text-[#f44336]">клієнти</span>
+			</Fragment>
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+				{reviews.map(([initials, name, text]) => (
+					<ReviewCard initials={initials} name={name} text={text} />
+				))}
+			</div>
+		</Section>
+
+		{/* Як ми працюємо */}
+		<Section>
+			<Fragment slot="title">
+				Як ми <span class="text-[#f44336]">працюємо?</span>
+			</Fragment>
+			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				{steps.map(({ icon, title, text }, i) => (
+					<FeatureCard icon={icon} title={title} text={text} variant="stack" number={`0${i + 1}`} />
+				))}
+			</div>
+		</Section>
+
+		{/* Де нас знайти */}
+		<Section link={{ href: '/contacts/', label: 'Всі контакти' }}>
+			<Fragment slot="title">
+				Де нас <span class="text-[#f44336]">знайти?</span>
+			</Fragment>
+			<div class="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
+				<div class="flex flex-col gap-5">
+					<div class="rounded-2xl border border-white/10 bg-[#111618] p-5 sm:p-6">
+						<div class="space-y-4">
+							{whereContacts.map(({ icon: Icon, title, text }) => (
+								<div class="flex items-start gap-3.5">
+									<span class="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-[#f44336]/25 bg-[#f44336]/10 text-[#f44336]">
+										<Icon size={18} />
+									</span>
+									<div class="min-w-0 flex-1">
+										<strong class="block text-sm font-bold text-white">{title}</strong>
+										<small class="mt-0.5 block text-sm text-[#b3b8b2]">{text}</small>
+									</div>
+								</div>
+							))}
+						</div>
+						<div class="mt-5 border-t border-white/10 pt-4">
+							<h3 class="mb-3 text-sm font-bold text-white">Ми в соцмережах</h3>
+							<SocialLinks />
+						</div>
+					</div>
+					<div class="flex flex-col justify-between rounded-2xl border border-white/10 bg-[#111618] p-5 sm:p-6">
+						<div>
+							<h3 class="mb-4 text-base font-bold text-white">Графік роботи</h3>
+							<ScheduleList class="mb-6" />
+						</div>
+						<Button href="/booking/" class="w-full rounded-xl px-5 py-3.5">
+							<CalendarDays size={18} />
+							Записатись на зручний час <ArrowRight size={17} />
+						</Button>
+					</div>
+				</div>
+				<MapEmbed height="h-full min-h-[320px]" />
+			</div>
+		</Section>
+
+		{/* Твоє авто заслуговує на краще */}
+		<CtaBand buttonLabel="Записатися на сервіс у Львові" buttonHref="/booking/">
+			<Fragment slot="title">
+				Довірте авто майстрам, <br />
+				яким <span>не байдуже</span>
+			</Fragment>
+			<Fragment slot="text">
+				Запишіться на зручний час сьогодні — перевіримо авто, зафіксуємо чесний кошторис і повернемо
+				готову машину точно в строк.
+			</Fragment>
+		</CtaBand>
+	</div>
+</Layout>

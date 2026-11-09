@@ -1,0 +1,33 @@
+---
+/** Сітка посилань на соцмережі з SVG-іконками з /public. Спільна для головної та контактів. */
+interface Props {
+	/** Класи сітки: кожна сторінка задає свою розкладку під ширину колонки. */
+	class?: string;
+}
+
+const { class: className = 'grid grid-cols-3 gap-2 sm:grid-cols-6' } = Astro.props;
+
+const networks = [
+	{ name: 'Instagram', icon: 'instagram.svg', href: 'https://www.instagram.com/' },
+	{ name: 'Facebook', icon: 'facebook.svg', href: 'https://www.facebook.com/' },
+	{ name: 'Telegram', icon: 'telegram.svg', href: 'https://t.me/' },
+	{ name: 'Viber', icon: 'viber.svg', href: 'https://www.viber.com/' },
+	{ name: 'WhatsApp', icon: 'whatsapp.svg', href: 'https://www.whatsapp.com/' },
+	{ name: 'Threads', icon: 'threads.svg', href: 'https://www.threads.net/' },
+];
+---
+
+<div class={className}>
+	{networks.map(({ name, icon, href }) => (
+		<a
+			class="flex flex-col items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.025] px-2 py-2.5 text-center transition hover:border-[#f44336]/50 hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+			href={href}
+			target="_blank"
+			rel="noreferrer"
+			aria-label={'Відкрити ' + name}
+		>
+			<img class="size-6 object-contain" src={'/' + icon} alt="" loading="lazy" />
+			<span class="text-white/70">{name}</span>
+		</a>
+	))}
+</div>

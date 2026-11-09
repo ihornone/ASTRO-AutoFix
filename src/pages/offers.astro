@@ -1,0 +1,301 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/ui/Button.astro';
+import { ArrowRight, CalendarDays, Check, Cog, ShieldCheck, Star } from 'lucide-react';
+
+const metrics = [
+	{ icon: Star, title: 'Чесна вигода', text: 'Знижки на комплексні роботи до 25%' },
+	{
+		icon: CalendarDays,
+		title: 'Сезонні пропозиції',
+		text: 'Вчасна підготовка авто до літа й зими',
+	},
+	{
+		icon: Check,
+		title: 'Бонуси за візити',
+		text: 'Кешбек 5% на ваш рахунок з кожного чека',
+	},
+	{
+		icon: ShieldCheck,
+		title: 'Офіційна гарантія',
+		text: '12 місяців або 20 000 км на всі роботи',
+	},
+];
+
+const featured = {
+	badge: 'Топ пропозиція місяця',
+	title: 'Комплексне ТО',
+	discount: '20',
+	text: 'Заміна масла, трьох фільтрів та повна діагностика ходової частини по 24 пунктах у подарунок.',
+};
+
+const offersPair = [
+	{
+		title: 'Сезонна заміна шин',
+		text: 'Шиномонтаж, балансування та перевірка тиску.',
+		discount: '15',
+		image: 'tires',
+		service: 'Шиномонтаж',
+	},
+	{
+		title: 'Обслуговування гальмівної системи',
+		text: 'Заміна колодок, дисків та діагностика гальм.',
+		discount: '10',
+		image: 'brakes',
+		service: 'Гальмівна система',
+	},
+];
+
+const seasonal = [
+	{
+		season: 'Зимовий сезон',
+		title: 'Комплексна підготовка до зими',
+		text: 'Перевірка температури замерзання антифризу, тест ємності АКБ під навантаженням та обробка замків.',
+		discount: '15',
+		image: 'tires',
+		service: 'Технічне обслуговування',
+	},
+	{
+		season: 'Весняний сезон',
+		title: 'Ревізія ходової після зими',
+		text: 'Повна діагностика підвіски на гідропідйомнику, перевірка сайлентблоків, амортизаторів і 3D-розвал.',
+		discount: '15',
+		image: 'workshop',
+		service: 'Діагностика автомобіля',
+	},
+	{
+		season: 'Літній сезон',
+		title: 'Клімат-контроль та кондиціонер',
+		text: 'Перевірка витоків азотом під тиском, апаратна заправка фреону за вагою та озонова дезінфекція салону.',
+		discount: '20',
+		image: 'engine',
+		service: 'Кондиціонер',
+	},
+];
+
+const loyalty = [
+	{
+		icon: Cog,
+		title: 'Кешбек 5% на баланс',
+		text: 'Накопичуйте бонуси з кожного чека та оплачуйте ними до 30% вартості робіт.',
+	},
+	{
+		icon: Star,
+		title: 'Приведи друга — по 500 грн',
+		text: 'Друг отримує 500 грн знижки на перший візит, а ви — 500 грн на свій бонусний рахунок.',
+	},
+	{
+		icon: ShieldCheck,
+		title: 'Безкоштовний огляд',
+		text: 'Контрольна перевірка підвіски по 24 точках кожні 6 місяців для постійних клієнтів.',
+	},
+];
+---
+
+<Layout title="Акції та пропозиції">
+	<div class="services-page offers-page text-[#f4f3ef] [&_h2_span]:[color:#f44336] [padding-bottom:28px]">
+		<PageHero
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Акції та пропозиції' }]}
+			intro="Чесна вигода на якісний автосервіс у Львові. Офіційна гарантія 12 місяців на кожну акційну пропозицію."
+		>
+			<Fragment slot="title">
+				Акції та <span>вигідні пакети</span>
+			</Fragment>
+			<Button data-book>
+				<CalendarDays size={19} />
+				Записатись зі знижкою <ArrowRight size={17} />
+			</Button>
+			<Button variant="outline" href="#current-offers">
+				<Star size={18} />
+				Усі діючі акції
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} />
+
+		<section
+			class="container offers-current mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8 [padding-block:28px_20px] [scroll-margin-top:20px]"
+			id="current-offers"
+		>
+			<h2 class="mb-3 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Актуальні <span>пропозиції</span>
+			</h2>
+			<p class="offers-demo mb-5 max-w-3xl text-sm leading-5 text-white/70 [color:#b3b8b2]">
+				Оберіть вигідний пакет обслуговування. Знижка фіксується під час підтвердження запису в
+				заказ-наряді.
+			</p>
+
+			{/* Головна пропозиція місяця */}
+			<article class="offer-featured relative mb-4 grid overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] [border:1px_solid_#ffffff50] [border-radius:var(--r-xl)] [isolation:isolate] [&>img]:absolute [&>img]:inset-0 [&>img]:z-[-2] [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&>img]:object-[75%_center] [&:after]:absolute [&:after]:inset-0 [&:after]:z-[-1] [&:after]:[content:''] [&:after]:[background:linear-gradient(90deg,_#080b0dfa_0%,_#080b0dd9_38%,_#080b0d20_85%)] md:grid-cols-2 [min-height:250px]">
+				<img
+					class="h-48 w-full object-cover md:h-full [display:block] [width:100%] [object-fit:cover]"
+					src="/images/oil.jpg"
+					alt="Заміна моторного масла"
+				/>
+				<div class="offer-featured-copy flex flex-col items-start justify-center p-5 [@media(max-width:900px)]:[padding-left:28px] [@media(max-width:560px)]:[padding:20px] sm:p-8 [padding:17px_48px]">
+					<span class="offer-top mb-3 inline-flex items-center gap-2 rounded-full bg-[#f44336] px-3 py-1 text-sm font-bold text-[#111] [border-radius:999px] [padding:6px_13px] [margin-bottom:10px]">
+						<Star size={15} />
+						{featured.badge}
+					</span>
+					<h3 class="mb-3 text-2xl font-semibold leading-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+						{featured.title}
+						<br />
+						зі знижкою <span class="text-[#f44336]">{featured.discount}%</span>
+					</h3>
+					<p class="mb-5 text-sm leading-6 text-white/60 [color:#b3b8b2]">{featured.text}</p>
+					<Button data-book data-service="Технічне обслуговування">
+						<CalendarDays size={18} />
+						Записатись на ТО <ArrowRight size={17} />
+					</Button>
+				</div>
+				<span class="offer-seal absolute right-4 top-4 grid h-16 w-16 place-items-center rounded-full bg-[#f44336] text-base font-bold text-[#170f0f] shadow-lg [clip-path:polygon(_50%_0%,_60%_5%,_70%_3%,_77%_12%,_88%_14%,_91%_25%,_99%_32%,_96%_43%,_100%_53%,_94%_63%,_94%_74%,_83%_80%,_78%_90%,_66%_91%,_57%_99%,_46%_95%,_35%_99%,_27%_90%,_16%_88%,_13%_77%,_4%_70%,_6%_59%,_0%_49%,_6%_39%,_5%_28%,_16%_22%,_22%_12%,_33%_11%,_42%_3%_)] [height:122px] [transform:rotate(-15deg)] [width:122px] sm:right-6 sm:top-6 sm:h-20 sm:w-20 sm:text-2xl [@media(max-width:560px)]:[height:78px] [@media(max-width:560px)]:[right:14px] [@media(max-width:560px)]:[top:20px] [@media(max-width:560px)]:[width:78px]">
+					−{featured.discount}%
+				</span>
+			</article>
+
+			{/* Пара додаткових пропозицій */}
+			<div class="offers-pair grid grid-cols-1 gap-4 [gap:17px] [margin-top:17px] md:grid-cols-2">
+				{offersPair.map(({ title, text, discount, image, service }) => (
+					<article class="offer-small relative grid min-h-52 grid-cols-[36%_1fr] overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] [border:1px_solid_#ffffff45] [border-radius:var(--r-xl)] [isolation:isolate] [&>div]:[max-width:61%] [&>div]:[padding:17px_29px] [&>img]:absolute [&>img]:right-0 [&>img]:top-0 [&>img]:z-[-2] [&>img]:h-full [&>img]:w-[55%] [&>img]:object-cover [&>img]:[mask-image:linear-gradient(90deg,_transparent_0,_#000_32%)] [&>img]:[-webkit-mask-image:linear-gradient(90deg,_transparent_0,_#000_32%)] [&:after]:absolute [&:after]:inset-0 [&:after]:z-[-1] [&:after]:[content:''] [&:after]:[background:linear-gradient(90deg,_#111618_36%,_#111618d9_55%,_#11161800_84%)] [min-height:180px] [@media(max-width:900px)]:[&>div]:[max-width:68%] [@media(max-width:900px)]:[&>div]:[padding:18px] [@media(max-width:560px)]:[&>div]:[max-width:65%]">
+						<img
+							class="h-full w-full object-cover [display:block]"
+							src={'/images/' + image + '.jpg'}
+							alt={title}
+							loading="lazy"
+						/>
+						<div class="p-4">
+							<h3 class="mb-2 text-base font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+								{title}
+							</h3>
+							<p class="mb-4 text-sm leading-5 text-white/60 [color:#b3b8b2]">{text}</p>
+							<Button variant="outline" data-book data-service={service}>
+								Записатись <ArrowRight size={16} />
+							</Button>
+						</div>
+						<span class="offer-discount absolute right-3 top-3 rounded-full bg-[#f44336] px-3 py-1 text-sm font-bold text-[#170f0f] [border-radius:999px] [padding:4px_13px] [line-height:1.3]">
+							−{discount}%
+						</span>
+					</article>
+				))}
+			</div>
+		</section>
+
+		{/* Сезонні пропозиції */}
+		<section class="container offers-seasonal mx-auto w-full max-w-[1320px] px-4 py-10 sm:px-6 md:py-14 lg:px-8 [padding-block:0_22px]">
+			<div class="offers-section-heading mb-5 flex items-center justify-between gap-3 [gap:20px] [margin-bottom:17px]">
+				<h2 class="mb-0 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Сезонні <span>пропозиції</span>
+				</h2>
+				<div class="flex gap-3">
+					<button
+						class="seasonal-prev grid size-9 place-items-center rounded-full border border-white/40 bg-transparent text-white transition hover:border-[#f44336] hover:bg-[#f44336] hover:text-[#111] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+						aria-label="Попередні сезонні пропозиції"
+					>
+						←
+					</button>
+					<button
+						class="seasonal-next grid size-9 place-items-center rounded-full border border-[#f44336] bg-[#f44336] text-[#111] transition hover:bg-[#ff5252] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+						aria-label="Наступні сезонні пропозиції"
+					>
+						→
+					</button>
+				</div>
+			</div>
+			<div class="offers-seasonal-track flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:[display:none]">
+				{seasonal.map(({ season, title, text, discount, image, service }, i) => (
+					<article
+						class:list={[
+							"offer-season relative min-w-[85%] snap-start overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] [border-radius:var(--r-lg)] [isolation:isolate] [&>img]:absolute [&>img]:inset-0 [&>img]:z-[-2] [&>img]:h-full [&>img]:w-full [&>img]:object-cover [&:after]:absolute [&:after]:inset-0 [&:after]:z-[-1] [&:after]:[content:''] [&:after]:[background:linear-gradient(90deg,_#111618e8,_#11161890_65%,_#11161840)] sm:min-w-[48%] lg:min-w-[32%]",
+							{ winter: i === 0, spring: i === 1 },
+						]}
+					>
+						<img
+							class="absolute inset-0 h-full w-full object-cover opacity-30 [display:block]"
+							src={'/images/' + image + '.jpg'}
+							alt=""
+							loading="lazy"
+						/>
+						<div class="relative z-10 flex min-h-64 flex-col items-start p-5">
+							<span class="offer-season-label mb-3 inline-flex items-center gap-2 rounded-full border border-[#ff525245] bg-[#11141699] px-[9px] py-1 text-sm font-semibold text-[#f44336] [margin-bottom:19px] [padding:4px_9px]">
+								{i === 0 ? (
+									<Cog size={17} />
+								) : i === 1 ? (
+									<Check size={17} />
+								) : (
+									<CalendarDays size={17} />
+								)}
+								{season}
+							</span>
+							<h3 class="mb-2 text-base font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+								{title}
+							</h3>
+							<p class="mb-5 text-sm leading-5 text-white/65 [color:#b3b8b2]">{text}</p>
+							<Button
+								size="sm"
+								data-book
+								data-service={service}
+								aria-label={'Записатися: ' + title + ', знижка ' + discount + ' відсотків'}
+								class="absolute right-3 top-3 rounded-full bg-[#f44336] px-3 py-1 font-bold text-[#170f0f] [padding:4px_13px] [line-height:1.3]"
+							>
+								−{discount}% <ArrowRight size={14} />
+							</Button>
+						</div>
+					</article>
+				))}
+			</div>
+		</section>
+
+		{/* Бонуси та реферальна програма */}
+		<section class="container offers-loyalty mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-4 rounded-2xl border border-white/10 bg-[#111618] px-4 py-7 [align-items:center] [border:1px_solid_#ffffff25] [border-radius:var(--r-xl)] [padding:17px_33px] [&_article]:[border-left:1px_solid_#ffffff38] [&_article]:[padding-left:32px] [&_article_svg]:[color:#f44336] [&_article_svg]:[margin-bottom:5px] [&_h3]:[margin-bottom:3px] [&_h3]:[line-height:1.15] [&_p]:[color:#d6ded8] [&_p]:[line-height:1.4] [&_p]:[margin:0] sm:px-6 lg:grid-cols-[1.4fr_repeat(3,_1fr)] [@media(max-width:900px)]:[gap:15px] [@media(max-width:900px)]:[padding:20px] [@media(max-width:900px)]:[&_article]:[padding-left:15px] [@media(max-width:560px)]:[&_article]:[border-left:0] [@media(max-width:560px)]:[&_article]:[border-top:1px_solid_#ffffff30] [@media(max-width:560px)]:[&_article]:[padding:15px_0_0]">
+			<div>
+				<h2 class="text-2xl font-semibold leading-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+					Бонуси та
+					<br />
+					<span>"Приведи друга"</span>
+				</h2>
+				<p class="text-sm leading-relaxed text-[#d6ded8]">
+					Діліться надійним сервісом
+					<br />
+					та заощаджуйте на кожному ТО!
+				</p>
+			</div>
+			{loyalty.map(({ icon: Icon, title, text }) => (
+				<article>
+					<Icon size={35} />
+					<h3 class="mb-2 text-base font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+						{title}
+					</h3>
+					<p class="mb-5 text-sm leading-5 text-white/65 [color:#b3b8b2]">{text}</p>
+				</article>
+			))}
+		</section>
+
+		<CtaBand buttonLabel="Записатись зі знижкою" class="[margin-top:30px]">
+			<Fragment slot="title">
+				Бажаєте зафіксувати <br />
+				<span>акційну ціну?</span>
+			</Fragment>
+			<Fragment slot="text">
+				Запишіться на зручний день — закріпимо знижку за вашим авто та узгодимо зручний час візиту.
+			</Fragment>
+		</CtaBand>
+	</div>
+</Layout>
+
+<script>
+	const track = document.querySelector<HTMLElement>('.offers-seasonal-track')!;
+	function move(direction: number) {
+		const card = track.querySelector<HTMLElement>('.offer-season')!;
+		const amount = card.getBoundingClientRect().width + 16;
+		if (direction > 0 && track.scrollLeft + track.clientWidth >= track.scrollWidth - 2)
+			track.scrollTo({ left: 0, behavior: 'smooth' });
+		else if (direction < 0 && track.scrollLeft <= 2)
+			track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+		else track.scrollBy({ left: direction * amount, behavior: 'smooth' });
+	}
+	document.querySelector('.seasonal-prev')!.addEventListener('click', () => move(-1));
+	document.querySelector('.seasonal-next')!.addEventListener('click', () => move(1));
+</script>

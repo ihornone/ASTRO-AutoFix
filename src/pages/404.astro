@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/ui/Button.astro';
+import { ArrowRight } from 'lucide-react';
+---
+
+<Layout title="Сторінку не знайдено">
+	<section class="mx-auto flex min-h-[60svh] w-full max-w-[1320px] flex-col items-start justify-center px-4 py-16 sm:px-6 md:min-h-[68svh] md:py-24 lg:px-8">
+		<span class="mb-4 font-semibold uppercase tracking-[0.16em] text-[#f44336]">
+			ПОМИЛКА 404 · СТОРІНКУ НЕ ЗНАЙДЕНО
+		</span>
+		<h1 class="mb-5 max-w-4xl text-balance text-2xl font-semibold leading-[1.05] tracking-[-0.05em] sm:text-2xl [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance] [&_span]:[color:var(--red)]">
+			ЗДАЄТЬСЯ, МИ <span>ЗВЕРНУЛИ НЕ ТУДИ.</span>
+		</h1>
+		<p class="mb-7 max-w-xl text-base leading-7 text-[#b3b8b2] [color:#b3b8b2]">
+			Цієї сторінки більше не існує або адреса вказана з помилкою. Повернімося на перевірений
+			маршрут автосервісу AutoFix.
+		</p>
+		<div class="flex flex-wrap gap-3">
+			<Button href="/">
+				На головну <ArrowRight size={16} />
+			</Button>
+			<Button variant="outline" href="/services/">
+				Всі послуги
+			</Button>
+			<Button variant="outline" href="/booking/">
+				Онлайн-запис
+			</Button>
+		</div>
+	</section>
+</Layout>

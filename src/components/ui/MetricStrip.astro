@@ -1,0 +1,60 @@
+---
+/**
+ * Смуга з 4 переваг — точний блок із головної сторінки:
+ * на мобільному єдина картка з червоним контуром 2×2, на десктопі —
+ * 4 картки з блюром, з'єднані червоним SVG-декором.
+ */
+import type { LucideIcon } from 'lucide-react';
+
+interface MetricItem {
+	icon: LucideIcon;
+	title: string;
+	text: string;
+}
+
+interface Props {
+	items: MetricItem[];
+	class?: string;
+	id?: string;
+	'aria-label'?: string;
+}
+
+const { items, class: className, id, 'aria-label': ariaLabel } = Astro.props;
+---
+
+<section
+	class:list={[
+		'container catalog-benefits mx-auto w-full max-w-[1320px] px-4 py-6 sm:px-6 lg:px-8',
+		className,
+	]}
+	id={id}
+	aria-label={ariaLabel}
+>
+	<div class="landing-metrics relative z-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-[#f44336]/70 bg-[#f44336]/25 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:rounded-none lg:border-0 lg:bg-transparent">
+		{items.map(({ icon: Icon, title, text }) => (
+			<div class="flex items-center gap-3.5 rounded-none bg-[#141819] p-4 backdrop-blur-md sm:p-5 lg:rounded-2xl lg:bg-[#141819]/70">
+				<span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#f44336]/10 text-[#f44336]">
+					<Icon size={22} />
+				</span>
+				<span>
+					<strong class="block text-sm font-bold text-white">{title}</strong>
+					<small class="mt-0.5 block text-white/60">{text}</small>
+				</span>
+			</div>
+		))}
+		<svg
+			class="pointer-events-none absolute inset-0 hidden h-full w-full lg:block [flex-shrink:0] [&_.lucide]:[stroke-width:1.6]"
+			viewBox="0 0 1000 100"
+			preserveAspectRatio="none"
+			aria-hidden="true"
+		>
+			<path
+				d="M12 1H238C246 1 250 8 250 18C250 8 254 1 262 1H488C496 1 500 8 500 18C500 8 504 1 512 1H738C746 1 750 8 750 18C750 8 754 1 762 1H988Q999 1 999 12V88Q999 99 988 99H762C754 99 750 92 750 82C750 92 746 99 738 99H512C504 99 500 92 500 82C500 92 496 99 488 99H262C254 99 250 92 250 82C250 92 246 99 238 99H12Q1 99 1 88V12Q1 1 12 1Z"
+				fill="none"
+				stroke="#f44336"
+				stroke-width="1.5"
+				vector-effect="non-scaling-stroke"
+			></path>
+		</svg>
+	</div>
+</section>

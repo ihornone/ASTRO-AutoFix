@@ -1,0 +1,79 @@
+---
+/**
+ * Картка відгуку.
+ * variant="avatar" — аватар-ініціали, зірки біля імені (головна);
+ * variant="quote"  — зірки зверху, ім'я у футері (сторінка Відгуки).
+ */
+interface Props {
+	name: string;
+	text: string;
+	initials?: string;
+	variant?: 'avatar' | 'quote';
+	hidden?: boolean;
+	class?: string;
+}
+
+const { name, text, initials, variant = 'avatar', hidden, class: className, ...rest } = Astro.props;
+
+const computedInitials =
+	initials ??
+	name
+		.split(' ')
+		.slice(0, 2)
+		.map((word) => word[0])
+		.join('');
+---
+
+{variant === 'avatar' ? (
+	<article
+		class:list={[
+			'flex flex-col justify-between rounded-2xl border border-white/10 bg-[#111618] p-5 transition hover:border-[#f44336]/40 sm:p-6',
+			className,
+		]}
+		{...rest}
+	>
+		<div>
+			<div class="mb-4 flex items-center gap-3">
+				<span class="flex size-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-[#171b1d] text-sm font-bold text-white">
+					{computedInitials}
+				</span>
+				<div class="min-w-0 flex-1">
+					<h3 class="truncate text-sm font-bold leading-snug text-white">{name}</h3>
+					<span
+						class="mt-1 block text-sm leading-none tracking-widest text-[#f44336]"
+						aria-label="5 із 5 зірок"
+					>
+						★★★★★
+					</span>
+				</div>
+			</div>
+			<p class="mb-0 text-sm leading-relaxed text-[#dce4de]">“{text}”</p>
+		</div>
+	</article>
+) : (
+	<article
+		class:list={[
+			'feedback-card flex min-h-[220px] flex-col rounded-2xl border border-white/10 bg-white/[0.035] p-6 transition hover:border-[#f44336]/40',
+			className,
+		]}
+		hidden={hidden}
+		{...rest}
+	>
+		<div class="flex items-center justify-between gap-4">
+			<span
+				class="text-base leading-none tracking-[0.08em] text-[#f44336]"
+				aria-label="5 із 5 зірок"
+			>
+				★★★★★
+			</span>
+		</div>
+		<blockquote class="mt-5 flex-1 text-sm leading-6 text-white/80 [color:#e0e5e1] [line-height:1.6] [margin:20px_0_24px]">
+			“{text}”
+		</blockquote>
+		<footer class="mt-auto border-t border-white/10 pt-4">
+			<h3 class="m-0 text-sm font-semibold tracking-tight text-[#f4f3ef] [font-weight:600]">
+				{name}
+			</h3>
+		</footer>
+	</article>
+)}

@@ -1,0 +1,45 @@
+---
+import { ArrowRight } from 'lucide-react';
+const { service, compact = false } = Astro.props;
+---
+
+<a
+	class:list={[
+		'service-card group flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.03] transition hover:-translate-y-1 hover:border-[#f44336]',
+		{ compact },
+	]}
+	href={'/services/' + service.slug + '/'}
+	data-category={service.category}
+>
+	<div class="service-image relative aspect-[1.55] overflow-hidden [aspect-ratio:1.55] [&_img]:[filter:saturate(0.7)_brightness(0.8)] [@media(max-width:640px)]:[aspect-ratio:1.8]">
+		<img
+			class="h-full w-full object-cover brightness-90 saturate-75 transition duration-500 group-hover:scale-105 [display:block] [width:100%] [object-fit:cover]"
+			src={'/images/' + service.image + '.jpg'}
+			alt={service.title}
+			loading="lazy"
+		/>
+		<span class="image-index absolute bottom-3 left-4 uppercase tracking-[0.15em] text-white/70 [color:#fff] [font:16px_var(--font)] [letter-spacing:0.08em]">
+			AutoFix / Львів
+		</span>
+	</div>
+	<div class="service-body flex flex-1 flex-col p-4 sm:p-5 [padding:18px_18px_15px] [&_h3]:[min-height:0] [&_h3]:[margin-bottom:12px] [&_h3]:[font-weight:600] [&_h3]:[letter-spacing:-0.035em] [&_ul]:[color:#aeb3ad] [&_li:before]:[color:var(--red)]">
+		<h3 class="mb-3 text-base font-semibold leading-tight tracking-tight [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+			{compact ? service.short : service.title}
+		</h3>
+		{!compact && (
+			<ul class="mb-5 space-y-1 text-sm leading-5 text-white/60">
+				{service.items.map((i: string) => (
+					<li class="before:mr-2 before:text-[#f44336] before:content-['›']">{i}</li>
+				))}
+			</ul>
+		)}
+		<div class="card-bottom mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-3 text-sm text-white/60 [margin-top:auto] [padding-top:13px] [border-top:1px_solid_var(--line)] [color:var(--muted)] [&_strong]:[color:#f4f3ef] [&_strong]:[font-weight:700]">
+			<span>
+				від <strong class="font-bold text-white">{service.price.toLocaleString('uk-UA')}</strong> ₴
+			</span>
+			<span class="circle-arrow grid h-8 w-8 place-items-center rounded-full border border-white/20 text-white transition group-hover:border-[#f44336] group-hover:bg-[#f44336] group-hover:text-black [border:1px_solid_#414647] [background:transparent] [color:#f4f3ef]">
+				<ArrowRight size={17} />
+			</span>
+		</div>
+	</div>
+</a>

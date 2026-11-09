@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/ui/PageHero.astro';
+import MetricStrip from '../components/ui/MetricStrip.astro';
+import FaqList from '../components/ui/FaqList.astro';
+import Button from '../components/ui/Button.astro';
+import ServiceCard from '../components/cards/ServiceCard.astro';
+import {
+	ArrowRight,
+	CalendarDays,
+	Car,
+	Clock,
+	Cog,
+	Menu,
+	Phone,
+	ShieldCheck,
+	Wrench,
+} from 'lucide-react';
+import { services } from '../data';
+
+const categories = ['Усі послуги', ...new Set(services.map((s) => s.category))];
+const icons = [Wrench, Cog, Car, Cog, ShieldCheck, Cog, Clock, Car];
+
+const metrics = [
+	{
+		icon: Cog,
+		title: 'Фіксований кошторис',
+		text: 'Ціна в заказ-наряді без сюрпризів',
+	},
+	{
+		icon: ShieldCheck,
+		title: 'Офіційна гарантія',
+		text: '12 місяців або 20 000 км пробігу',
+	},
+	{
+		icon: Clock,
+		title: 'Прийом без черг',
+		text: 'Запис на точний час і вчасна видача',
+	},
+	{
+		icon: Car,
+		title: 'Відеозвіт ремонту',
+		text: 'Показуємо стан деталей у Viber/Telegram',
+	},
+];
+
+const questions: [string, string][] = [
+	[
+		'Скільки часу займає діагностика автомобіля?',
+		'Комп’ютерна діагностика або огляд ходової на підйомнику триває 30–45 хвилин. За цей час майстер перевіряє 24 контрольні вузли, зчитує параметри блоків та складає акт із точним кошторисом і відеофіксацією дефектів.',
+	],
+	[
+		'Чи надаєте ви офіційну гарантію на ремонт?',
+		'Так. Ми виписуємо офіційну гарантію на 12 місяців або 20 000 км пробігу на всі виконані роботи та встановлені в нас деталі. Усі артикули й умови фіксуються в акті виконаних робіт.',
+	],
+	[
+		'Чи можу я бути присутнім у ремзоні біля свого авто?',
+		'Так, без проблем. Ви можете перебувати біля автомобіля разом із майстром за дотримання техніки безпеки. Також доступна комфортна зона очікування з панорамним оглядом, кавою та Wi-Fi.',
+	],
+	[
+		'З якими марками та роками автомобілів ви працюєте?',
+		'Обслуговуємо легкові авто та кросовери більшості брендів: Volkswagen, Skoda, Audi, BMW, Mercedes, Renault, Ford, Toyota, Hyundai, Kia тощо. Маємо дилерське ПЗ та спецінструмент під кожну марку.',
+	],
+	[
+		'Що робити, якщо під час розбирання виявлять приховані поломки?',
+		'Жодної самодіяльності: майстер знімає дефект на відео, надсилає у Telegram або Viber, пояснює ступінь терміновості та називає точну ціну запчастин і роботи. Без вашої згоди ми не проводимо жодних дій.',
+	],
+];
+---
+
+<Layout title="Послуги">
+	<div class="services-page text-[#f4f3ef] [padding-bottom:28px]">
+		<PageHero
+			crumbs={[{ href: '/', label: 'Головна' }, { label: 'Послуги' }]}
+			intro="Повний спектр професійної діагностики, ТО та ремонту автомобілів у Львові. Фіксована ціна та гарантія 12 місяців."
+		>
+			<Fragment slot="title">
+				Послуги <span>автосервісу</span>
+			</Fragment>
+			<Button data-book>
+				<CalendarDays size={19} />
+				Записатись на сервіс <ArrowRight size={18} />
+			</Button>
+			<Button variant="soft" href="/prices/">
+				<Menu size={18} />
+				Прайс-лист послуг
+			</Button>
+		</PageHero>
+
+		<MetricStrip items={metrics} aria-label="Переваги сервісу" />
+
+		<section class="container catalog-layout mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-7 px-4 py-10 sm:px-6 md:py-14 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-9 lg:px-8">
+			<aside class="catalog-sidebar min-w-0 lg:sticky lg:top-8 lg:self-start">
+				<h2 class="mb-3 text-base font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Категорії послуг
+				</h2>
+				<div
+					class="catalog-category-list flex gap-2 overflow-x-auto pb-2 lg:flex-col [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:[display:none]"
+					role="group"
+					aria-label="Категорії послуг"
+				>
+					{categories.map((category, index) => {
+						const I = index === 0 ? Menu : icons[(index - 1) % icons.length];
+						return (
+							<button
+								class:list={[
+									'flex min-h-11 shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.025] px-3 py-2 text-left text-sm text-white/75 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336] hover:border-[#f44336] lg:w-full',
+									{ 'selected border-[#f44336]/60 bg-[#f44336]/10 text-white': index === 0 },
+								]}
+								data-catalog-filter={category}
+								aria-pressed={index === 0}
+							>
+								<I size={18} />
+								{category}
+							</button>
+						);
+					})}
+				</div>
+			</aside>
+			<div class="catalog-results min-w-0">
+				<h2
+					class="mb-5 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]"
+					id="catalog-heading"
+					aria-live="polite"
+				>
+					Усі послуги
+				</h2>
+				<div class="catalog-grid grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+					{services.map((service, index) => (
+						<ServiceCard
+							service={service}
+							variant="catalog"
+							data-catalog-category={service.category}
+						/>
+					))}
+				</div>
+			</div>
+		</section>
+
+		<section class="container mx-auto my-8 w-full max-w-[1320px] px-4 sm:px-6 md:my-12 lg:px-8">
+			<div class="catalog-consultation flex w-full flex-col items-start gap-5 rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-7 sm:px-7 md:flex-row md:items-center md:justify-between">
+				<div>
+					<h2 class="mb-2 text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+						Не впевнені, яка послуга потрібна?
+					</h2>
+					<p class="mb-0 text-sm text-white/60 [color:#b3b8b2]">
+						Опишіть проблему чи сторонній звук — майстер-приймальник проконсультує,
+						<br />
+						зорієнтує за вартістю та підбере зручний час візиту.
+					</p>
+				</div>
+				<Button data-book data-service="Потрібна консультація" class="w-full sm:w-auto">
+					<Phone size={21} />
+					Консультація майстра <ArrowRight size={18} />
+				</Button>
+			</div>
+		</section>
+
+		<section class="container catalog-faq mx-auto grid w-full max-w-[1320px] grid-cols-1 gap-5 px-4 py-10 sm:px-6 md:grid-cols-[0.7fr_1.3fr] md:py-14 lg:px-8">
+			<h2 class="text-2xl font-semibold [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+				Часті <br class="hidden md:block" />
+				запитання<span> водіїв</span>
+			</h2>
+			<FaqList items={questions} />
+		</section>
+	</div>
+</Layout>
+
+<script>
+	const buttons = document.querySelectorAll<HTMLButtonElement>('[data-catalog-filter]');
+	buttons.forEach((button) =>
+		button.addEventListener('click', () => {
+			buttons.forEach((item) => {
+				item.classList.toggle('selected', item === button);
+				item.setAttribute('aria-pressed', String(item === button));
+			});
+			const selected = button.dataset.catalogFilter;
+			document.querySelectorAll<HTMLElement>('[data-catalog-category]').forEach((card) => {
+				card.hidden = selected !== 'Усі послуги' && card.dataset.catalogCategory !== selected;
+			});
+			document.querySelector('#catalog-heading')!.textContent = selected!;
+		}),
+	);
+</script>

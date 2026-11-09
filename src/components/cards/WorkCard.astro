@@ -1,0 +1,102 @@
+---
+/**
+ * Картка виконаної роботи / кейсу.
+ * variant="case"   — посилання з бейджем «Дивитись кейс» (головна);
+ * variant="work"   — стаття для сітки галереї (фільтрація за даними атрибутами).
+ */
+import { ArrowRight, CalendarDays, Car } from 'lucide-react';
+
+interface Props {
+	title: string;
+	description: string;
+	image: string;
+	car?: string;
+	time?: string;
+	href?: string;
+	variant?: 'case' | 'work';
+	hidden?: boolean;
+	class?: string;
+}
+
+const {
+	title,
+	description,
+	image,
+	car,
+	time,
+	href = '/gallery/',
+	variant = 'case',
+	hidden,
+	class: className,
+	...rest
+} = Astro.props;
+
+const Wrapper = variant === 'case' ? 'a' : 'article';
+---
+
+<Wrapper
+	class:list={[
+		variant === 'case'
+			? 'group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111618] transition duration-300 hover:-translate-y-1 hover:border-[#f44336]/60 hover:shadow-xl hover:shadow-black/40 focus-visible:outline-2 focus-visible:outline-[#f44336]'
+			: 'work-card group overflow-hidden rounded-2xl border border-white/10 bg-[#111618]',
+		className,
+	]}
+	...(variant='=="case"'
+	?
+	{href}
+	:
+	{hidden}
+	),
+	{...rest}
+>
+	<div
+		class:list={[
+			'relative w-full overflow-hidden bg-[#171b1d]',
+			variant === 'case' ? 'aspect-[16/10]' : 'h-48 sm:h-52',
+		]}
+	>
+		<img
+			class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+			src={'/images/' + image + '.jpg'}
+			alt={title}
+			loading="lazy"
+			decoding="async"
+		/>
+		<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--bg-card,#111618)] via-transparent to-transparent" />
+		{variant === 'case' && (
+			<span class="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-black/60 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-md transition group-hover:border-[#f44336] group-hover:bg-[#f44336] group-hover:text-black">
+				Дивитись кейс <ArrowRight size={14} />
+			</span>
+		)}
+	</div>
+	<div class="flex flex-1 flex-col p-4 sm:p-5">
+		<h3
+			class:list={[
+				'font-bold leading-snug text-white transition-colors group-hover:text-[#f44336]',
+				variant === 'case' ? 'mb-2 text-base' : 'mb-2 text-base',
+			]}
+		>
+			{title}
+		</h3>
+		<p class="mb-4 text-sm leading-5 text-[#b3b8b2]">{description}</p>
+		<div
+			class:list={[
+				'mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3 text-sm text-[#dce2de]',
+				variant === 'case' ? 'gap-3 pt-3.5' : 'text-white/55',
+			]}
+		>
+			{car && (
+				<span class="inline-flex items-center gap-1.5 truncate font-medium">
+					<Car size={16} class="shrink-0 text-[#f44336]" />
+					<span class="truncate">{car}</span>
+				</span>
+			)}
+			{time && (
+				<span class="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap font-medium">
+					<CalendarDays size={15} class="shrink-0 text-[#f44336]" />
+					<span>{time}</span>
+				</span>
+			)}
+		</div>
+	</div>
+</Wrapper>

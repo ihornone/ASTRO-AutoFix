@@ -1,0 +1,42 @@
+---
+/**
+ * Картка спеціаліста: фото, іконка спеціалізації, ім'я та опис.
+ */
+import type { LucideIcon } from 'lucide-react';
+
+interface Props {
+	name: string;
+	description: string;
+	image: string;
+	icon: LucideIcon;
+	class?: string;
+}
+
+const { name, description, image, icon: Icon, class: className } = Astro.props;
+---
+
+<article
+	class:list={[
+		'group relative flex min-h-[350px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111618] transition duration-300 hover:-translate-y-1 hover:border-[#f44336]/60 hover:shadow-xl hover:shadow-black/30',
+		className,
+	]}
+>
+	<div class="relative h-56 overflow-hidden after:absolute after:inset-x-0 after:bottom-0 after:h-20 after:bg-gradient-to-b after:from-transparent after:to-[var(--bg-card,#111618)] after:content-[''] sm:h-64">
+		<img
+			class="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105 [display:block] [width:100%] [object-fit:cover]"
+			src={'/images/' + image + '.webp'}
+			alt={name + ' — спеціаліст AutoFix'}
+			loading="lazy"
+			decoding="async"
+		/>
+	</div>
+	<div class="relative -mt-2 flex flex-1 flex-col px-4 pb-5 sm:px-5">
+		<span class="mb-3 grid size-10 place-items-center rounded-xl border border-[#f44336]/20 bg-[#f44336]/10 text-[#f44336]">
+			<Icon size={20} />
+		</span>
+		<h3 class="mb-2 text-base font-semibold text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+			{name}
+		</h3>
+		<p class="mb-0 text-sm leading-5 text-white/60 [color:#b3b8b2]">{description}</p>
+	</div>
+</article>

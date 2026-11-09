@@ -1,0 +1,200 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-autofix-bg: #080b0d;
+	--color-autofix-panel: #111618;
+	--color-autofix-accent: #f44336;
+	--color-autofix-muted: #929891;
+	--color-autofix-line: #272b2d;
+	--color-autofix-highlight: #ff5252;
+	--font-sans: 'Barlow', 'Arial', sans-serif;
+
+	/* Єдина типографічна шкала: лише три розміри на всьому сайті */
+	--text-sm: 1rem; /* 16px — навігація, підписи, кнопки, метадані */
+	--text-sm--line-height: 1.5;
+	--text-base: 1.25rem; /* 20px — основний текст, картки, h3 */
+	--text-base--line-height: 1.5;
+	--text-2xl: 2rem; /* 32px — великі заголовки h1/h2 */
+	--text-2xl--line-height: 1.15;
+
+	/* Псевдоніми: будь-який інший утиліт-розмір зводиться до одного з трьох */
+	--text-xs: 1rem;
+	--text-lg: 1.25rem;
+	--text-xl: 1.25rem;
+	--text-3xl: 2rem;
+	--text-4xl: 2rem;
+	--text-5xl: 2rem;
+}
+
+@layer base {
+	:root {
+		--bg-site: #080b0d;
+		--bg-card: #111618;
+		--bg-subtle: #171b1d;
+		--bg-header: rgba(10, 14, 16, 0.9);
+		--border-card: rgba(255, 255, 255, 0.1);
+		--border-subtle: rgba(255, 255, 255, 0.05);
+		--text-title: #f4f3ef;
+		--text-body: #b3b8b2;
+		--text-muted: #929891;
+		--accent: #f44336;
+		--accent-hover: #ff5252;
+		--accent-bg: rgba(244, 67, 54, 0.1);
+		--accent-border: rgba(244, 67, 54, 0.4);
+		--shadow-card: 0 4px 20px rgba(0, 0, 0, 0.35);
+		--page-wash: rgba(5, 8, 10, 0.18);
+		--page-bg-img: url('/images/site-background-dark.webp');
+		--page-background-image: url('/images/site-background-dark.webp');
+		color-scheme: dark;
+	}
+
+	h1,
+	h2 {
+		font-size: var(--text-2xl);
+		line-height: 1.15;
+	}
+
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-size: var(--text-base);
+		line-height: 1.3;
+	}
+
+	/* Tailwind v4 прибрав cursor:pointer у кнопок — повертаємо для всіх інтерактивних елементів */
+	button:not(:disabled),
+	[role='button']:not(:disabled),
+	label:has(> input[type='checkbox']),
+	label:has(> input[type='radio']) {
+		cursor: pointer;
+	}
+}
+
+/* ==========================================================================
+   Анімації та плавні переходи сайту AutoFix
+   ========================================================================== */
+
+@keyframes heroFadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(22px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes pulseDot {
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.35);
+		opacity: 0.75;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	/* Плавна поява Hero-блоків */
+	.catalog-hero-copy h1,
+	.landing-hero h1 {
+		animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+	}
+
+	.catalog-hero-copy p,
+	.landing-hero p {
+		animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+	}
+
+	.catalog-hero-copy .catalog-actions,
+	.landing-hero .catalog-actions {
+		animation: heroFadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+	}
+
+	/* Плавна поява секцій при прокручуванні */
+	.reveal-on-scroll {
+		opacity: 0;
+		transform: translateY(20px);
+		transition:
+			opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+		will-change: opacity, transform;
+	}
+
+	.reveal-on-scroll.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	/* Пульсуючі точки статусу */
+	.status-dot,
+	[class*='rounded-full bg-[#f44336]']:not([class*='p-']):not([class*='size-6']):not(
+			[class*='size-11']
+		):not([class*='size-10']):not([class*='size-9']):not([class*='size-8']):not([class*='size-7']) {
+		animation: pulseDot 2.2s infinite ease-in-out;
+	}
+
+	/* Картки послуг, кейсів та відгуків: плавний підйом і неоновий відблиск */
+	article,
+	.service-card,
+	.work-card,
+	.contact-box,
+	.pricing-package {
+		transition:
+			transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 0.26s ease,
+			box-shadow 0.26s ease,
+			background-color 0.26s ease !important;
+	}
+
+	article:hover,
+	.service-card:hover,
+	.work-card:hover {
+		box-shadow:
+			0 12px 32px -8px rgba(0, 0, 0, 0.75),
+			0 0 20px -4px rgba(244, 67, 54, 0.2) !important;
+	}
+
+	/* Кнопки: плавна мікро-анімація та відгук при кліку */
+	.button,
+	button[data-book],
+	.header-book {
+		transition:
+			transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+			background-color 0.2s ease,
+			border-color 0.2s ease !important;
+	}
+
+	.button:hover,
+	button[data-book]:hover,
+	.header-book:hover {
+		transform: translateY(-1.5px);
+		box-shadow: 0 8px 24px -4px rgba(244, 67, 54, 0.45);
+	}
+
+	.button:active,
+	button[data-book]:active,
+	.header-book:active {
+		transform: translateY(0) scale(0.98);
+	}
+
+	/* Плавне розкриття акордеона FAQ */
+	details {
+		transition:
+			border-color 0.25s ease,
+			background-color 0.25s ease;
+	}
+
+	details summary {
+		transition: color 0.2s ease;
+	}
+
+	details p {
+		animation: heroFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+}

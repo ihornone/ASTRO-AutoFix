@@ -1,0 +1,51 @@
+---
+/**
+ * Фінальний CTA-банер сторінки: заголовок + текст + кнопка дії.
+ * Заголовок і текст — слоти (щоб вставляти акцентні <span> та <br>).
+ */
+import Button from './ui/Button.astro';
+import { ArrowRight } from 'lucide-react';
+
+interface Props {
+	buttonLabel: string;
+	buttonHref?: string;
+	dataBook?: boolean;
+	dataService?: string;
+	/** Додаткові data-* атрибути кнопки (наприклад data-write-review) */
+	buttonData?: Record<string, string | undefined>;
+	class?: string;
+}
+
+const {
+	buttonLabel,
+	buttonHref,
+	dataBook = true,
+	dataService,
+	buttonData = {},
+	class: className,
+} = Astro.props;
+---
+
+<section
+	class:list={['container mx-auto my-8 w-full max-w-[1320px] px-4 sm:px-6 lg:px-8', className]}
+>
+	<div class="catalog-consultation flex w-full flex-col items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-6 sm:flex-row sm:items-center sm:gap-8 sm:px-6">
+		<div class="max-w-xl">
+			<h2 class="mb-2 text-2xl font-semibold leading-tight tracking-tight text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance] [&_span]:[color:var(--red)]">
+				<slot name="title" />
+			</h2>
+			<p class="mb-0 text-sm leading-6 text-white/60 [color:#b3b8b2]">
+				<slot name="text" />
+			</p>
+		</div>
+		<Button
+			href={buttonHref}
+			data-book={dataBook ? '' : undefined}
+			data-service={dataService}
+			{...buttonData}
+			class="shrink-0 sm:w-auto"
+		>
+			{buttonLabel} <ArrowRight size={17} />
+		</Button>
+	</div>
+</section>

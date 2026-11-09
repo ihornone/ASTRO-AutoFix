@@ -1,0 +1,83 @@
+---
+/**
+ * Герой внутрішніх сторінок (catalog-hero): фон-зображення, хлібні крихті,
+ * заголовок з акцентом, вступ і кнопки дій. Замінює 8 однакових блоків.
+ * Слот "title" — заголовок h1; default-слот — кнопки.
+ */
+interface Crumb {
+	href?: string;
+	label: string;
+}
+
+interface Props {
+	crumbs: Crumb[];
+	intro?: string;
+	image?: string;
+	imagePosition?: string;
+	/** Правила оформлення перших двох кнопок дій (усі сторінки, крім /services/[slug]) */
+	styledActions?: boolean;
+	class?: string;
+}
+
+const {
+	crumbs,
+	intro,
+	image = '/images/hero.jpg',
+	imagePosition = 'object-[62%_center] brightness-75',
+	styledActions = true,
+	class: className,
+} = Astro.props;
+---
+
+<section
+	class:list={[
+		"catalog-hero relative after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:z-[1] after:h-36 after:bg-gradient-to-b after:from-transparent after:to-[#080b0d] after:content-[''] flex min-h-[420px] items-center overflow-hidden py-20 [padding-top:100px] sm:min-h-[500px] md:min-h-[560px]",
+		className,
+	]}
+>
+	<img
+		class:list={[
+			'absolute inset-0 h-full w-full object-cover [display:block] [width:100%] [object-fit:cover]',
+			imagePosition,
+		]}
+		src={image}
+		alt="Автомобіль у майстерні AutoFix"
+		fetchpriority="high"
+	/>
+	<div class="container catalog-hero-copy relative z-10 mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
+		<nav class="mb-4 flex gap-2 text-sm text-white/70" aria-label="Хлібні крихти">
+			{crumbs.map((crumb, i) => (
+				<>
+					{i > 0 && <span>›</span>}
+					{crumb.href ? (
+						<a
+							class="transition hover:text-[#f44336] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+							href={crumb.href}
+						>
+							{crumb.label}
+						</a>
+					) : (
+						<span>{crumb.label}</span>
+					)}
+				</>
+			))}
+		</nav>
+		<h1 class="mb-4 text-2xl font-semibold tracking-[-0.06em] [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance] [&_span]:[color:var(--red)]">
+			<slot name="title" />
+		</h1>
+		{intro && (
+			<p class="mb-6 max-w-xl text-sm leading-6 text-white/80 sm:text-base [color:#b3b8b2]">
+				{intro}
+			</p>
+		)}
+		<div
+			class:list={[
+				'catalog-actions flex flex-wrap gap-3',
+				styledActions &&
+					'[&>_:first-child]:[border:1px_solid_#f44336] [&>_:first-child]:[background:#f44336] [&>_:first-child]:[color:#151515] [&>_:first-child:hover]:[border-color:#ff6258] [&>_:first-child:hover]:[background:#ff6258] [&>_:nth-child(2)]:[border:1px_solid_rgb(255_255_255_/_45%)] [&>_:nth-child(2)]:[background:rgb(255_255_255_/_3%)] [&>_:nth-child(2)]:[color:#f4f3ef] [&>_:nth-child(2):hover]:[border-color:#f44336] [&>_:nth-child(2):hover]:[background:rgb(255_255_255_/_7%)]',
+			]}
+		>
+			<slot />
+		</div>
+	</div>
+</section>

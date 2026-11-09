@@ -1,0 +1,653 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/ui/PageHero.astro';
+import MetricStrip from '../../components/ui/MetricStrip.astro';
+import Button from '../../components/ui/Button.astro';
+import {
+	ArrowRight,
+	CalendarDays,
+	Check,
+	CheckCircle2,
+	Clock3,
+	Gauge,
+	Phone,
+	Settings,
+	ShieldCheck,
+	Wrench,
+} from 'lucide-react';
+import { prices, services } from '../../data';
+
+export function getStaticPaths() {
+	return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props;
+const servicePrices = prices[service.category] ?? [];
+const startingPrice = servicePrices[0]?.[1] ?? service.price;
+const tierPrices = [
+	startingPrice,
+	Math.round((startingPrice * 1.65) / 10) * 10,
+	Math.round((startingPrice * 2.5) / 10) * 10,
+];
+const priceTiers = [
+	{
+		name: 'Базовий комплекс',
+		note: 'Основні регламентні роботи за стандартом виробника',
+		price: tierPrices[0],
+	},
+	{
+		name: 'Оптимальний пакет',
+		note: 'Повний перелік робіт + поглиблена діагностика вузлів',
+		price: tierPrices[1],
+	},
+	{
+		name: 'Преміум-догляд',
+		note: 'Максимальний сервіс із розширеною перевіркою та гарантією',
+		price: tierPrices[2],
+	},
+];
+const details = {
+	maintenance: {
+		eyebrow: 'ПЛАНОВЕ ОБСЛУГОВУВАННЯ',
+		headline: 'Регулярний сервіс для довговічності авто',
+		intro:
+			'Заміна моторного масла та фільтрів за 45 хвилин за допусками автовиробника. Комп’ютерна перевірка 24 вузлів безпеки у подарунок.',
+		interval: 'кожні 8 000 – 10 000 км',
+		intervalText:
+			'або 1 раз на рік, щоб уникнути передчасного зношування поршневої групи та турбіни.',
+		overview:
+			'Планове технічне обслуговування захищає двигун від перегріву та масляного голодування. Ми підбираємо масло суворо за допусками (Motul, Mobil1, Castrol) та відкриваємо каністри у вашій присутності. Старі фільтри та деталі повертаємо в багажник.',
+		included: [
+			'Заміна моторного масла (вакуум або злив через піддон)',
+			'Заміна масляного фільтра з новим кільцем ущільнювача',
+			'Заміна повітряного фільтра двигуна',
+			'Заміна салонного фільтра (антиалергенний / вугільний)',
+			'Перевірка стану та температури замерзання антифризу',
+			'Огляд гальмівних дисків, колодок та шлангів',
+			'Діагностика ходової частини на гідравлічному підйомнику',
+			'Перевірка заряду акумулятора та генератора тестером',
+		],
+		image: 'oil',
+		benefits: [
+			'Оригінальні масла та перевірені фільтри (Mann, Mahle, Bosch)',
+			'Письмова гарантія на роботу та витратні матеріали 12 міс.',
+			'Безкоштовний огляд підвіски та гальм під час кожного ТО',
+			'Електронна та паперова сервісна книга з фіксацією пробігу',
+		],
+		steps: [
+			'Онлайн-запис на зручний час',
+			'Прийом авто без черги за 2 хв',
+			'Заміна матеріалів і перевірка 24 точок',
+			'Видача авто з гарантійним талоном',
+		],
+	},
+	diagnostics: {
+		eyebrow: 'ТОЧНА КОМП’ЮТЕРНА ДІАГНОСТИКА',
+		headline: 'Знаходимо першопричину збою дилерськими сканерами',
+		intro:
+			'Повна перевірка електронних систем, блоків керування та параметрів двигуна. Жодних нав’язаних замін справних деталей.',
+		interval: 'за появи Check Engine / збоїв',
+		intervalText: 'або перед далекою мандрівкою чи купівлею вживаного автомобіля.',
+		overview:
+			'Помилка на панелі — це лише симптом. Наші діагности зчитують параметри роботи датчиків у реальному часі під навантаженням, перевіряють тиск палива, корекцію впорскування форсунок і стан каталізатора/сажового фільтра. Ви отримуєте зрозумілий звіт без складного сленгу.',
+		included: [
+			'Комп’ютерне сканування всіх систем (ДВЗ, АКПП, ABS, ESP, Airbag)',
+			'Зчитування потокових даних у реальному часі (Live Data)',
+			'Ендоскопія циліндрів двигуна (пошук задирів та нагару)',
+			'Вимірювання тиску паливної рампи та компресії циліндрів',
+			'Перевірка лакофарбового покриття товщиноміром (перед купівлею)',
+			'Тест ємності та пускового струму акумулятора під навантаженням',
+			'Діагностика системи запалювання та високовольтних кіл',
+			'Офіційний роздрукований акт із планом необхідних робіт',
+		],
+		image: 'diagnostics',
+		benefits: [
+			'Дилерські сканери для європейських, азійських та американських авто',
+			'Пояснюємо висновки простою людською мовою',
+			'Пріоритизуємо ремонт: що потрібно терміново, а що почекає',
+			'Погодження плану ремонту та вартості до початку дій',
+		],
+		steps: [
+			'Фіксація симптомів і скарг',
+			'Сканування електронних блоків',
+			'Тестування вузлів під навантаженням',
+			'Видача висновку та плану ремонту',
+		],
+	},
+	suspension: {
+		eyebrow: 'СТІЙКІСТЬ, КЕРОВАНІСТЬ І КОМФОРТ',
+		headline: 'Повертаємо автомобілю плавність і безпеку',
+		intro:
+			'Усуваємо сторонні стуки, люфти, скрипи та вібрації. Використовуємо деталі заводської якості з гарантією 12 місяців.',
+		interval: 'кожні 15 000 км або при стуку',
+		intervalText:
+			'а також після сильного потрапляння колеса у вибоїну чи при погіршенні керованості.',
+		overview:
+			'Справна ходова — це ваша безпека в поворотах і скорочений гальмівний шлях. Ми перевіряємо підвіску під навантаженням, щоб точно визначити люфт конкретного сайлентблока чи кульової опори, а не міняти справні вузли навмання.',
+		included: [
+			'Діагностика стійок і втулок стабілізатора',
+			'Перевірка амортизаторів на витоки та демпфування',
+			'Огляд кульових опор, важелів і сайлентблоків',
+			'Діагностика кермової рейки, тяг і наконечників',
+			'Перевірка підшипників маточини на гул і люфт',
+			'Акуратна заміна деталей на пресі без пошкодження посадкових місць',
+			'3D-регулювання розвалу-сходження коліс після ремонту',
+			'Контрольний тест-драйв майстром перед видачею авто',
+		],
+		image: 'brakes',
+		benefits: [
+			'Деталі від перевірених брендів (Lemförder, Sachs, TRW, CTR)',
+			'Гідравлічний прес для заміни сайлентблоків без кувалди',
+			'Відеозвіт зношених деталей у Telegram / Viber',
+			'Офіційна письмова гарантія на 12 місяців або 20 000 км',
+		],
+		steps: [
+			'Огляд на підйомнику зі стендом люфтів',
+			'Узгодження точного списку деталей і ціни',
+			'Встановлення запчастин за регламентом',
+			'Перевірка геометрії коліс і видача',
+		],
+	},
+	engine: {
+		eyebrow: 'СЕРЦЕ ВАШОГО АВТОМОБІЛЯ',
+		headline: 'Надійний ремонт двигунів за стандартами заводів',
+		intro:
+			'Від заміни ременя або ланцюга ГРМ до усунення масложору та капітального ремонту. Фіксований кошторис і гарантія 12 місяців.',
+		interval: 'за регламентом або симптомами',
+		intervalText:
+			'заміна ГРМ кожні 60 000 – 90 000 км або негайно при появі диму, шуму чи зниженні тяги.',
+		overview:
+			'Обслуговування сучасних двигунів вимагає точності до сотих часток міліметра та дотримання моментів затяжки за динамометричним ключем. Ми не експериментуємо на вашому авто: використовуємо спецінструмент для фіксації фаз ГРМ і оригінальні ущільнювачі.',
+		included: [
+			'Заміна комплекту ременя/ланцюга ГРМ із помпою та роликами',
+			'Усунення витоків масла: сальники, прокладки піддону та клапанної кришки',
+			'Ремонт і шліфування головки блоку циліндрів (ГБЦ)',
+			'Заміна клапанів, маслознімних ковпачків та гідрокомпенсаторів',
+			'Чищення дросельної заслінки, клапана EGR і впускного колектора',
+			'Перевірка та заміна навісного обладнання (генератор, помпа, компресор)',
+			'Заміна свічок запалювання або розжарювання без ризику залому',
+			'Комп’ютерна адаптація фаз і тест роботи двигуна',
+		],
+		image: 'engine',
+		benefits: [
+			'Спеціальні фіксатори фаз під кожен тип двигуна',
+			'Динамометричний контроль кожної різьби',
+			'Всі зняті зношені деталі повертаємо власнику',
+			'Гарантія 12 місяців на мотори та встановлені компоненти',
+		],
+		steps: [
+			'Ендоскопія та комп’ютерна діагностика',
+			'Дефектовка вузлів і фіксація кошторису',
+			'Ремонт із дотриманням заводських моментів',
+			'Вихідна комп’ютерна адаптація',
+		],
+	},
+	brakes: {
+		eyebrow: 'БЕЗКОМПРОМІСНА БЕЗПЕКА ЗУПИНКИ',
+		headline: 'Гальмівна система, яка зупинить авто вчасно',
+		intro:
+			'Заміна дисків, колодок, повна ревізія супортів та апаратна заміна гальмівної рідини. 100% надійності за будь-якої погоди.',
+		interval: 'кожні 10 000 км або при скрипі',
+		intervalText:
+			'а також якщо збільшився хід педалі гальма, з’явився писк або авто веде вбік під час гальмування.',
+		overview:
+			'Ми не просто міняємо колодки: обов’язково зачищаємо посадкові скоби від іржі, перевіряємо вільний хід напрямних пальців супорта та наносимо фірмову термостійку пасту. Заміну гальмівної рідини виконуємо апаратно під тиском, виключаючи потрапляння бульбашок повітря в контур ABS.',
+		included: [
+			'Заміна гальмівних колодок із чищенням та змащенням посадочних місць',
+			'Заміна гальмівних дисків із вимірюванням биття маточини',
+			'Апаратна заміна гальмівної рідини під тиском (DOT 4 / DOT 5.1)',
+			'Ревізія та відновлення рухомості супортів',
+			'Заміна гальмівних поршнів, манжет і пильовиків',
+			'Регулювання та натягування стоянкового гальма (ручника)',
+			'Перевірка гальмівних шлангів на мікротріщини та здуття',
+			'Тест ефективності гальмування на стенді після збирання',
+		],
+		image: 'brakes',
+		benefits: [
+			'Оригінальні компоненти (Brembo, ATE, Ferodo, Textar, Bosch)',
+			'Очищення та термостійка паста для напрямних — у подарунок',
+			'Апаратна прокачка ABS без повітряних пробок',
+			'Гарантія 12 місяців на гальмівні вузли та роботи',
+		],
+		steps: [
+			'Замір товщини дисків і колодок',
+			'Погодження деталей (оригінал або аналоги)',
+			'Монтаж зі змащенням і чищенням супортів',
+			'Вихідний тест гальмування на стенді',
+		],
+	},
+	electrical: {
+		eyebrow: 'ЕЛЕКТРОНІКА ТА ПРОВОДКА ПІД КОНТРОЛЕМ',
+		headline: 'Пошук витоків струму та ремонт автоелектрики',
+		intro:
+			'Знаходимо приховані замикання, ремонтуємо генератори, стартери, відновлюємо джгути проводки та адаптуємо блоки керування.',
+		interval: 'за появи збоїв або розрядки АКБ',
+		intervalText:
+			'якщо акумулятор сідає за ніч, не працює світло, відмовляють склопідйомники або панель приладів.',
+		overview:
+			'Автоелектрика вимагає логіки та високоточного обладнання. Замість хаотичної заміни запобіжників ми вимірюємо струм спокою в кожному ланцюзі цифровими струмовими кліщами, перевіряємо шини даних CAN і LIN осцилографом та усуваємо причину окислення контактів.',
+		included: [
+			'Точний пошук місця витоку струму (розряджання АКБ у спокої)',
+			'Ремонт, перепакування та відновлення джгутів проводки',
+			'Діагностика та перебирання генераторів (діодний міст, щітки, підшипники)',
+			'Ремонт стартерів (втягуюче реле, бендикс, втулки)',
+			'Адаптація та прописування нових акумуляторів (AGM, EFB)',
+			'Ремонт освітлення, фар, денних ходових вогнів і коректорів',
+			'Діагностика та заміна датчиків парктроніка, ABS, колінвала',
+			'Усунення помилок блоків комфорту та іммобілайзера',
+		],
+		image: 'diagnostics',
+		benefits: [
+			'Професійні діагностичні осцилографи та стенди перевірки',
+			'Якісна пайка та термоусадочна ізоляція з клейовим шаром',
+			'Захист заводської проводки від окислення та перетирання',
+			'Офіційна гарантія на відновлену електрику 12 міс.',
+		],
+		steps: [
+			'Зчитування кодів помилок блоків',
+			'Замір параметрів і локалізація обриву/замикання',
+			'Акуратний ремонт без шкоди інтер’єру',
+			'Контрольна перевірка під навантаженням',
+		],
+	},
+	'air-conditioning': {
+		eyebrow: 'ІДЕАЛЬНИЙ КЛІМАТ У САЛОНІ АВТО',
+		headline: 'Заправка, чистка та ремонт автокондиціонерів',
+		intro:
+			'Перевірка контуру азотом під тиском, заправка очищеним фреоном за електронними вагами та озонування салону від неприємних запахів.',
+		interval: 'перед початком літнього сезону',
+		intervalText:
+			'або якщо повітря охолоджується повільно, з’явився сирий запах чи сторонній шум компресора.',
+		overview:
+			'Заправляти кондиціонер без перевірки на витоки — це викидати гроші. Ми опресовуємо систему азотом під тиском 18 бар, знаходимо мікротріщини, вакуумуємо систему для видалення вологи та заправляємо точну кількість холодоагенту за заводською табличкою вашого авто.',
+		included: [
+			'Опресування системи азотом під тиском 15–20 бар на герметичність',
+			'Глибоке вакуумування системи для видалення конденсату та повітря',
+			'Заправка сертифікованим фреоном R134a / R1234yf за точною вагою',
+			'Додавання спеціального синтетичного PAG-масла та UV-барвника',
+			'Антибактеріальна озонова обробка повітроводів від бактерій і грибка',
+			'Заміна салонного фільтра та промивка радіатора кондиціонера',
+			'Ремонт трубок, заміна ущільнювальних кілець і золотників',
+			'Діагностика електромагнітної муфти та компресора клімату',
+		],
+		image: 'engine',
+		benefits: [
+			'Автоматична італійська заправна станція без ручних похибок',
+			'Обов’язкова перевірка герметичності перед заправкою',
+			'Тільки чистий сертифікований фреон без шкідливих домішок',
+			'Гарантія працездатності кондиціонера на весь сезон',
+		],
+		steps: [
+			'Опресування контуру азотом',
+			'Вакуумування та осушення системи',
+			'Заправка фреону, масла та UV-маркера',
+			'Тест охолодження електронним термометром',
+		],
+	},
+	tires: {
+		eyebrow: 'СЕЗОННИЙ СЕРВІС КОЛІС БЕЗ ЧЕРГ',
+		headline: 'Швидкий шиномонтаж та надточне балансування',
+		intro:
+			'Акуратне перевзування шин на дисках від R13 до R22, включаючи RunFlat і низький профіль. Балансування з точністю до 1 грама.',
+		interval: 'двічі на рік (сезонна заміна)',
+		intervalText:
+			'при переході середньодобової температури через +7°C або при появі вібрації керма на швидкості.',
+		overview:
+			'Нерівномірне балансування розбиває підшипники маточини та кермову рейку. Ми ретельно відмиваємо диски від старого бруду, центруємо колесо на каліброваному німецькому валу та використовуємо пластикові захисні насадки на лапу шиномонтажного станка, щоб не подряпати диски.',
+		included: [
+			'Демонтаж та монтаж шин (стандартні, RunFlat, низькопрофільні)',
+			'Динамічне балансування на високоточному каліброваному станку',
+			'Очищення маточини від іржі та нанесення мідної або керамічної пасти',
+			'Перевірка та коригування тиску в усіх 4 колесах + запаска',
+			'Заміна зношених ніпелів і вентилів на нові',
+			'Ремонт проколів, порізів і встановлення надійних кордових латок',
+			'Акуратне маркування шин (перед/зад, ліво/право) перед зберіганням',
+			'Огляд стану протектора та рекомендації щодо безпеки',
+		],
+		image: 'tires',
+		benefits: [
+			'Захисні насадки на станку — жодної подряпини на ваших дисках',
+			'Балансування з точністю до 1 г без биття керма на швидкості',
+			'Запис на точний час — без багатогодинних сезонних черг',
+			'Затягування колісних болтів суворо динамометричним ключем',
+		],
+		steps: [
+			'Зняття коліс та мийка дисків',
+			'Монтаж шин із захистом ободу',
+			'Точне балансування коліс',
+			'Затяжка болтів динамометричним ключем',
+		],
+	},
+};
+const detail = details[service.slug] ?? details.maintenance;
+const includeImages = [
+	detail.image,
+	service.image,
+	'diagnostics',
+	'brakes',
+	'engine',
+	'tires',
+	'oil',
+	'workshop',
+];
+const serviceItems = [...detail.included];
+const formatPrice = (value: number) => value.toLocaleString('uk-UA');
+const stepNotes = [
+	'Зручний запис онлайн або телефоном',
+	'Перевірка стану авто та узгодження робіт',
+	'Виконуємо лише погоджений перелік робіт',
+	'Пояснюємо результат і видаємо авто',
+];
+---
+
+<Layout title={`${service.title} — AutoFix`}>
+	<main class="services-page service-detail-page w-full text-[#f4f3ef] [&_h2_span]:[color:#f44336]">
+		<PageHero
+			imagePosition="object-[65%_center] brightness-75"
+			styledActions={false}
+			crumbs={[
+				{ href: '/', label: 'Головна' },
+				{ href: '/services/', label: 'Послуги' },
+				{ label: service.short },
+			]}
+			intro={detail.intro}
+		>
+			<Fragment slot="title">
+				{service.title} <span>AutoFix</span>
+			</Fragment>
+			<Button data-book data-service={service.title}>
+				<CalendarDays size={19} />
+				Записатися на {service.short.toLowerCase()} <ArrowRight size={18} />
+			</Button>
+			<Button variant="soft" href="tel:+380631234567">
+				<Phone size={18} />
+				Консультація
+			</Button>
+		</PageHero>
+
+		<MetricStrip
+			aria-label="Переваги сервісу"
+			items={[
+				{ icon: ShieldCheck, title: 'Офіційна гарантія', text: 'на виконані роботи' },
+				{ icon: Settings, title: 'Якісні матеріали', text: 'підбір для вашого авто' },
+				{ icon: Clock3, title: 'Вчасний сервіс', text: 'дотримуємося термінів' },
+				{ icon: Gauge, title: 'Більшість марок', text: 'уточніть сумісність у нас' },
+			]}
+		/>
+
+		<div class="mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-8">
+			{/* Про послугу */}
+			<section class="mt-10 grid items-center gap-7 lg:grid-cols-2 lg:gap-10">
+				<div class="group relative min-h-64 overflow-hidden rounded-2xl border border-white/10 sm:min-h-[360px]">
+					<img
+						class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03] [display:block] [width:100%] [object-fit:cover]"
+						src={`/images/${service.image}.jpg`}
+						alt={`${service.title}: робота майстра в автосервісі`}
+						loading="lazy"
+					/>
+					<div class="absolute inset-0 bg-gradient-to-t from-[#080b0dcc] via-transparent to-transparent"></div>
+					<div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/60 px-3 py-2 text-sm font-semibold">
+						<span class="h-2 w-2 rounded-full bg-[#f44336]"></span>Сервіс AutoFix
+					</div>
+				</div>
+				<div class="py-2">
+					<p class="mb-2 text-sm font-bold uppercase tracking-[.18em] text-[#f44336] [color:#b3b8b2]">
+						ПРО ПОСЛУГУ
+					</p>
+					<h2 class="text-2xl font-bold leading-tight tracking-tight text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+						Що таке <span class="text-[#f44336]">{service.short.toLowerCase()}</span>?
+					</h2>
+					<p class="mt-4 text-sm leading-7 text-white/70 [color:#b3b8b2] sm:text-base">
+						{detail.overview}
+					</p>
+					<p class="mt-3 text-sm leading-7 text-white/70 [color:#b3b8b2] sm:text-base">
+						{service.description} Після перевірки майстер пояснить результат і відповість на ваші
+						запитання.
+					</p>
+					<div class="mt-6 grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-5">
+						{[
+							{ icon: ShieldCheck, text: 'Безпека\nна дорозі' },
+							{ icon: Gauge, text: 'Стабільна\nробота авто' },
+							{ icon: CheckCircle2, text: 'Перевірений\nрезультат' },
+						].map(({ icon: Icon, text }) => (
+							<div class="flex flex-col gap-2 px-2 first:pl-0 sm:flex-row sm:items-center sm:gap-3 sm:px-4">
+								<Icon className="h-7 w-7 shrink-0 text-[#f44336]" />
+								<span class="whitespace-pre-line font-semibold leading-4 text-white sm:text-sm">
+									{text}
+								</span>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+
+			{/* Комплекс робіт */}
+			<section class="mt-12 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_350px]">
+				<div>
+					<div class="mb-5 flex items-end justify-between gap-4">
+						<div>
+							<p class="mb-1 text-sm font-bold uppercase tracking-[.18em] text-[#f44336] [color:#b3b8b2]">
+								КОМПЛЕКС РОБІТ
+							</p>
+							<h2 class="text-2xl font-bold tracking-tight text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+								Що входить <span class="text-[#f44336]">у послугу?</span>
+							</h2>
+						</div>
+						<span class="hidden text-sm text-white/45 sm:block">
+							Підбираємо обсяг під ваше авто
+						</span>
+					</div>
+					<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+						{serviceItems.map((item, index) => (
+							<article class="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition hover:-translate-y-1 hover:border-[#f44336]/50">
+								<div class="relative h-28 overflow-hidden sm:h-32">
+									<img
+										class="h-full w-full object-cover transition duration-500 group-hover:scale-110 [display:block] [width:100%] [object-fit:cover]"
+										src={`/images/${includeImages[index]}.jpg`}
+										alt=""
+										loading="lazy"
+									/>
+									<div class="absolute inset-0 bg-gradient-to-t from-[#080b0dcc] to-transparent"></div>
+									<span class="absolute bottom-2 left-3 inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#f44336] text-[#151515]">
+										<Wrench className="h-4 w-4" />
+									</span>
+								</div>
+								<h3 class="min-h-[4.2rem] px-3 py-3 text-sm font-semibold leading-5 text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+									{item}
+								</h3>
+							</article>
+						))}
+					</div>
+				</div>
+				<aside class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.035] p-5 sm:p-6 xl:mt-10">
+					<p class="mb-1 text-sm font-bold uppercase tracking-[.16em] text-[#f44336] [color:#b3b8b2]">
+						ВАШ СПОКІЙ ЗА КЕРМОМ
+					</p>
+					<h2 class="text-2xl font-bold leading-tight text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+						Переваги сервісу <span class="text-[#f44336]">AutoFix</span>
+					</h2>
+					<ul class="mt-5 space-y-3">
+						{detail.benefits.map((benefit) => (
+							<li class="flex items-start gap-2.5 text-sm leading-5 text-white/80">
+								<Check class="mt-0.5 h-4 w-4 shrink-0 rounded bg-[#f44336] p-0.5 text-[#171717]" />
+								{benefit}
+							</li>
+						))}
+					</ul>
+					<img
+						class="mt-5 h-36 w-full rounded-xl object-cover [display:block] [width:100%] [object-fit:cover]"
+						src={`/images/${service.image}.jpg`}
+						alt="Обладнання сервісу AutoFix"
+						loading="lazy"
+					/>
+				</aside>
+			</section>
+
+			{/* Регулярність і ціни */}
+			<section class="mt-10 grid gap-5 lg:grid-cols-2">
+				<article class="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-7">
+					<div>
+						<p class="mb-1 text-xs font-bold uppercase tracking-[.16em] text-[#f44336] sm:text-sm">
+							КОЛИ ЗВЕРТАТИСЯ
+						</p>
+						<h2 class="text-2xl font-bold text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+							Регулярність обслуговування
+						</h2>
+
+						<div class="mt-5 flex items-center gap-3.5 rounded-xl border border-[#f44336]/30 bg-[#f44336]/10 p-4">
+							<span class="flex size-11 shrink-0 items-center justify-center rounded-lg bg-[#f44336]/20 text-[#f44336]">
+								<CalendarDays class="h-6 w-6" />
+							</span>
+							<div class="min-w-0 flex-1">
+								<span class="block text-xs font-bold uppercase tracking-wider text-[#f44336]">
+									Рекомендований інтервал
+								</span>
+								<strong class="text-base font-bold text-white">{detail.interval}</strong>
+							</div>
+						</div>
+
+						<p class="mt-4 text-sm leading-6 text-white/80">
+							Рекомендуємо звертатися:{' '}
+							<span class="font-medium text-white">{detail.intervalText}</span>
+						</p>
+						<p class="mt-2 text-sm leading-5 text-[#b3b8b2]">
+							Інтервал може відрізнятися залежно від моделі, пробігу та рекомендацій виробника.
+						</p>
+					</div>
+
+					<div class="mt-6 flex items-center gap-2.5 border-t border-white/10 pt-4 text-sm text-[#b3b8b2]">
+						<Wrench class="h-4 w-4 shrink-0 text-[#f44336]" />
+						<span>Дотримуємось регламентів та технічних карт автовиробників</span>
+					</div>
+				</article>
+				<article class="flex flex-col justify-between rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-7">
+					<div>
+						<p class="mb-1 text-xs font-bold uppercase tracking-[.16em] text-[#f44336] sm:text-sm">
+							ПРОЗОРА ВАРТІСТЬ
+						</p>
+						<h2 class="text-2xl font-bold text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+							Ціни на послуги
+						</h2>
+						<div class="mt-4 divide-y divide-white/10">
+							{priceTiers.map((tier) => (
+								<div class="flex items-center justify-between gap-3 py-3">
+									<div>
+										<p class="text-sm font-semibold text-white">{tier.name}</p>
+										<p class="mt-0.5 text-sm text-[#b3b8b2]">{tier.note}</p>
+									</div>
+									<span class="shrink-0 text-right text-sm font-bold text-[#f44336]">
+										від {formatPrice(tier.price)} ₴
+									</span>
+								</div>
+							))}
+						</div>
+						<p class="mt-3 text-xs leading-5 text-[#929891]">
+							Остаточна вартість залежить від моделі авто, запчастин і погодженого переліку робіт.
+						</p>
+					</div>
+					<div class="mt-6 border-t border-white/10 pt-4">
+						<a
+							class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-[#f44336] hover:bg-[#f44336] hover:text-[#170f0f] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]"
+							href="/prices/"
+						>
+							Детальні ціни
+							<ArrowRight class="h-4 w-4" />
+						</a>
+					</div>
+				</article>
+			</section>
+
+			{/* Як проходить обслуговування */}
+			<section class="mt-12">
+				<p class="mb-1 text-sm font-bold uppercase tracking-[.16em] text-[#f44336] [color:#b3b8b2]">
+					ПРОСТО ТА ЗРОЗУМІЛО
+				</p>
+				<h2 class="text-2xl font-bold tracking-tight text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Як проходить <span class="text-[#f44336]">обслуговування?</span>
+				</h2>
+				<div class="mt-5 grid gap-3 sm:grid-cols-2">
+					{detail.steps.map((step, index) => (
+						<article class="rounded-2xl border border-white/10 bg-white/[0.025] p-4 sm:p-5">
+							<div class="flex items-center gap-3">
+								<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/25 text-sm font-bold text-white">
+									0{index + 1}
+								</span>
+								<h3 class="text-sm font-bold text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08]">
+									{step}
+								</h3>
+							</div>
+							<p class="mt-1.5 text-sm leading-5 text-white/60 [color:#b3b8b2]">
+								{stepNotes[index]}
+							</p>
+						</article>
+					))}
+				</div>
+			</section>
+
+			{/* CTA запису */}
+			<section class="relative mt-10 overflow-hidden rounded-2xl border border-white/10 bg-[#171b1d] px-5 py-7 sm:px-8 sm:py-9">
+				<img
+					class="absolute inset-0 h-full w-full object-cover opacity-20 [display:block] [width:100%] [object-fit:cover]"
+					src="/images/hero.jpg"
+					alt=""
+					loading="lazy"
+				/>
+				<div class="absolute inset-0 bg-gradient-to-r from-[#101416] via-[#101416ee] to-[#10141688]"></div>
+				<div class="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
+					<div class="flex items-start gap-4">
+						<CalendarDays class="mt-1 h-9 w-9 shrink-0 text-[#f44336]" />
+						<div>
+							<h2 class="text-2xl font-bold leading-tight text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+								Запишіться на <span class="text-[#f44336]">{service.short.toLowerCase()}</span> у
+								Львові
+							</h2>
+							<p class="mt-2 max-w-xl text-sm leading-6 text-white/65 [color:#b3b8b2]">
+								Оберіть зручний день і час. Зафіксуємо вартість робіт і приймемо авто точно за
+								графіком без черг.
+							</p>
+						</div>
+					</div>
+					<Button
+						data-book
+						data-service={service.title}
+						class="w-full shrink-0 rounded-full px-6 py-3.5 sm:w-auto"
+					>
+						Записатися на сервіс
+						<ArrowRight class="h-4 w-4" />
+					</Button>
+				</div>
+			</section>
+
+			{/* FAQ */}
+			<section class="mx-auto mt-12 w-full max-w-[1320px]">
+				<p class="mb-1 text-sm font-bold uppercase tracking-[.16em] text-[#f44336] [color:#b3b8b2]">
+					КОРИСНО ЗНАТИ
+				</p>
+				<h2 class="mb-4 text-2xl font-bold text-white [font-family:var(--font)] [font-weight:600] [letter-spacing:-0.045em] [line-height:1.08] [text-wrap:balance]">
+					Поширені запитання водіїв
+				</h2>
+				{[
+					{
+						q: `Скільки часу займає ${service.short.toLowerCase()}?`,
+						a: 'Більшість планових робіт виконуємо в день звернення за 45–120 хвилин. Для складніших завдань оголошуємо точний термін здачі авто ще на етапі прийому.',
+					},
+					{
+						q: `Чи діє офіційна гарантія на ${service.short.toLowerCase()}?`,
+						a: 'Так, ми надаємо письмову гарантію 12 місяців або 20 000 км пробігу як на виконані майстром роботи, так і на встановлені запчастини з нашого складу.',
+					},
+					{
+						q: 'Чи зміниться узгоджена ціна у процесі ремонту?',
+						a: 'Ні, сума в заказ-наряді є остаточною. Якщо під час розбирання майстер виявить приховані дефекти, ми надішлемо вам відео у месенджер і проведемо ремонт лише після вашої згоди.',
+					},
+				].map(({ q, a }, i) => (
+					<details class:list={['border-white/10', i === 2 ? 'border-y' : 'border-t']}>
+						<summary class="cursor-pointer py-4 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f44336]">
+							{q}
+						</summary>
+						<p class="pb-4 text-sm leading-6 text-white/60 [color:#b3b8b2]">{a}</p>
+					</details>
+				))}
+			</section>
+		</div>
+	</main>
+</Layout>
